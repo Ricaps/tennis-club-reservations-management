@@ -43,4 +43,5 @@ class SurfaceDaoImplIT extends AbstractDaoTest<Surface> {
 
 		return entity;
 	}
+
 }
