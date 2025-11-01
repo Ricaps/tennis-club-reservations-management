@@ -7,12 +7,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.util.Currency;
 
 @Entity
 @Table
+@SuperBuilder
 @Getter
 @Setter
 @ToString
