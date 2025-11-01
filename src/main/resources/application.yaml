@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: Tennis Club Reservation System
+
+  datasource:
+    driver-class-name:
