@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1762011414112-1
+      id: 1762013073993-1
       author: martin
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -16,6 +16,11 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
+                  name: deleted
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
                   name: name
                   type: VARCHAR(255)
               - column:
@@ -25,7 +30,7 @@ databaseChangeLog:
                   type: UUID
             tableName: court
   - changeSet:
-      id: 1762011414112-2
+      id: 1762013073993-2
       author: martin
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -38,6 +43,11 @@ databaseChangeLog:
                     primaryKeyName: pk_reservation
                   name: uid
                   type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: deleted
+                  type: BOOLEAN
               - column:
                   constraints:
                     nullable: false
@@ -68,7 +78,7 @@ databaseChangeLog:
                   type: DECIMAL(10, 2)
             tableName: reservation
   - changeSet:
-      id: 1762011414112-3
+      id: 1762013073993-3
       author: martin
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -81,6 +91,11 @@ databaseChangeLog:
                     primaryKeyName: pk_surface
                   name: uid
                   type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: deleted
+                  type: BOOLEAN
               - column:
                   constraints:
                     nullable: false
@@ -98,7 +113,7 @@ databaseChangeLog:
                   type: VARCHAR(3)
             tableName: surface
   - changeSet:
-      id: 1762011414112-4
+      id: 1762013073993-4
       author: martin
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -111,6 +126,11 @@ databaseChangeLog:
                     primaryKeyName: pk_user_entity
                   name: uid
                   type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: deleted
+                  type: BOOLEAN
               - column:
                   constraints:
                     nullable: false
@@ -133,7 +153,7 @@ databaseChangeLog:
                   type: VARCHAR(255)
             tableName: user_entity
   - changeSet:
-      id: 1762011414112-5
+      id: 1762013073993-5
       author: martin
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -144,7 +164,7 @@ databaseChangeLog:
             referencedColumnNames: uid
             referencedTableName: surface
   - changeSet:
-      id: 1762011414112-6
+      id: 1762013073993-6
       author: martin
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -155,7 +175,7 @@ databaseChangeLog:
             referencedColumnNames: uid
             referencedTableName: court
   - changeSet:
-      id: 1762011414112-7
+      id: 1762013073993-7
       author: martin
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
