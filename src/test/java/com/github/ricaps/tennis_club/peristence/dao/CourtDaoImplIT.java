@@ -32,7 +32,7 @@ class CourtDaoImplIT extends AbstractDaoTest<Court> {
 	void setup() {
 		surface = Surface.builder()
 			.name("test")
-			.price(new BigDecimal("12.5"))
+			.price(new BigDecimal("12.50"))
 			.uid(UUID.randomUUID())
 			.currency(Currency.getInstance("CZK"))
 			.build();

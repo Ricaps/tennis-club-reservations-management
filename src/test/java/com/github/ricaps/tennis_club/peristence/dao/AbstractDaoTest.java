@@ -11,10 +11,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -172,10 +174,7 @@ public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
 
 	@Test
 	void saveAll_moreThan50Entities_allAreSavedBatched() {
-		List<EntityType> entities = new ArrayList<>();
-		for (int i = 0; i <= 50; i++) {
-			entities.add(createEntity());
-		}
+		List<EntityType> entities = generateEntities(51);
 		entityDao.saveAll(entities);
 
 		assertThat(entityDao.count()).isEqualTo(entities.size());
@@ -183,6 +182,14 @@ public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
 		Mockito.verify(entityManager, Mockito.times(entities.size())).persist(Mockito.any());
 		Mockito.verify(entityManager, Mockito.times(1)).flush();
 		Mockito.verify(entityManager, Mockito.times(1)).clear();
+	}
+
+	private List<EntityType> generateEntities(int count) {
+		List<EntityType> entities = new ArrayList<>();
+		for (int i = 0; i < count; i++) {
+			entities.add(createEntity());
+		}
+		return entities;
 	}
 
 	@Test
@@ -228,5 +235,75 @@ public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
 
 		assertThat(entityDao.count()).isEqualTo(entities.size());
 	}
+
+	@Test
+	void findAll_noEntities_emptyList() {
+		List<EntityType> result = entityDao.findAll(0, 10, Sort.by("uid"));
+		assertThat(result).isEmpty();
+	}
+
+	@Test
+	void findAll_entitiesSortedUid_returnsPages() {
+		List<EntityType> entities = generateEntities(50);
+
+		// Sort ascending according to uid
+		entities.sort((a, b) -> Objects.compare(a.getUid().toString(), b.getUid().toString(), String::compareTo));
+
+		entityDao.saveAll(entities);
+
+		List<EntityType> result = entityDao.findAll(0, 10, Sort.by("uid"));
+
+		assertThat(result).hasSize(10);
+		assertThat(result.getFirst()).isEqualTo(entities.getFirst());
+		assertThat(result.getLast()).isEqualTo(entities.get(9));
+	}
+
+	@Test
+	void findAll_entitiesSortedUidDesc_returnsPages() {
+		List<EntityType> entities = generateEntities(50);
+
+		// Sort descending according to uid
+		entities.sort((a, b) -> Objects.compare(b.getUid().toString(), a.getUid().toString(), String::compareTo));
+
+		entityDao.saveAll(entities);
+
+		List<EntityType> result = entityDao.findAll(0, 10, Sort.by("uid").descending());
+
+		assertThat(result).hasSize(10);
+		assertThat(result.getFirst()).isEqualTo(entities.getFirst());
+		assertThat(result.getLast()).isEqualTo(entities.get(9));
+	}
+
+	@Test
+	void findAll_moreThanLastPage_doesntReturnWholePage() {
+		List<EntityType> entities = generateEntities(50);
+
+		// Sort descending according to uid
+		entities.sort((a, b) -> Objects.compare(b.getUid().toString(), a.getUid().toString(), String::compareTo));
+
+		entityDao.saveAll(entities);
+
+		List<EntityType> result = entityDao.findAll(2, 20, Sort.by("uid").descending());
+
+		assertThat(result).hasSize(10);
+		assertThat(result.getFirst()).isEqualTo(entities.get(40));
+		assertThat(result.getLast()).isEqualTo(entities.getLast());
+	}
+
+	@Test
+	void findAll_moreThanAvailable_returnsEmpty() {
+		List<EntityType> entities = generateEntities(50);
+
+		// Sort descending according to uid
+		entities.sort((a, b) -> Objects.compare(b.getUid().toString(), a.getUid().toString(), String::compareTo));
+
+		entityDao.saveAll(entities);
+
+		List<EntityType> result = entityDao.findAll(5, 10, Sort.by("uid").descending());
+
+		assertThat(result).isEmpty();
+	}
+
+
 
 }

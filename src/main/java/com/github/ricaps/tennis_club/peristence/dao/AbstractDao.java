@@ -3,14 +3,18 @@ package com.github.ricaps.tennis_club.peristence.dao;
 import com.github.ricaps.tennis_club.peristence.dao.definition.CrudDao;
 import com.github.ricaps.tennis_club.peristence.entity.IdentifiedEntity;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Order;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,6 +26,17 @@ public abstract class AbstractDao<EntityType extends IdentifiedEntity> implement
 
 	public AbstractDao(EntityManager entityManager) {
 		this.entityManager = entityManager;
+	}
+
+	private List<Order> getOrderList(Sort sort, CriteriaBuilder criteriaBuilder, Root<EntityType> root) {
+		return sort.get()
+			.filter(order -> hasProperty(root, order.getProperty()))
+			.map(order -> switch (order.getDirection()) {
+
+				case ASC -> criteriaBuilder.asc(root.get(order.getProperty()));
+				case DESC -> criteriaBuilder.desc(root.get(order.getProperty()));
+			})
+			.toList();
 	}
 
 	@Override
@@ -86,6 +101,32 @@ public abstract class AbstractDao<EntityType extends IdentifiedEntity> implement
 		}
 
 		return Optional.ofNullable(entityManager.find(getEntityClass(), uuid));
+	}
+
+	@Override
+	public List<EntityType> findAll(int pageNumber, int pageSize, Sort sort) {
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<EntityType> criteriaQuery = criteriaBuilder.createQuery(getEntityClass());
+		Root<EntityType> root = criteriaQuery.from(getEntityClass());
+
+		List<Order> orders = getOrderList(sort, criteriaBuilder, root);
+
+		criteriaQuery.orderBy(orders);
+		TypedQuery<EntityType> typedQuery = entityManager.createQuery(criteriaQuery);
+		typedQuery.setMaxResults(pageSize);
+		typedQuery.setFirstResult(pageNumber * pageSize);
+
+		return typedQuery.getResultList();
+	}
+
+	private boolean hasProperty(Root<EntityType> root, String property) {
+		for (var attr : root.getModel().getAttributes()) {
+			if (property.equals(attr.getName())) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override
