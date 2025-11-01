@@ -51,7 +51,14 @@ public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
 
 		EntityType createdSurface = surfaceOpt.get();
 		checkEntity(createdSurface, entity);
+	}
 
+	@Test
+	void createSurface_null_returnsNull() {
+		EntityType saved = entityDao.save(null);
+
+		assertThat(saved).isNull();
+		Mockito.verify(entityManager, Mockito.never()).persist(Mockito.any());
 	}
 
 	@Test
@@ -82,6 +89,15 @@ public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
 		boolean result = entityDao.existsById(entity.getUid());
 
 		assertThat(result).isFalse();
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void existsById_nullUuid_returnFalse() {
+		boolean result = entityDao.existsById(null);
+
+		assertThat(result).isFalse();
+		Mockito.verify(entityManager, Mockito.never()).createQuery(Mockito.any(CriteriaQuery.class));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -119,8 +135,23 @@ public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
 	}
 
 	@Test
+	void updateEntity_null_notUpdated() {
+		EntityType updated = entityDao.update(null);
+
+		assertThat(updated).isNull();
+		Mockito.verify(entityManager, Mockito.never()).merge(Mockito.any());
+	}
+
+	@Test
 	void saveAll_emptyList_nothingIsSaved() {
 		entityDao.saveAll(List.of());
+
+		Mockito.verify(entityManager, Mockito.never()).persist(Mockito.any());
+	}
+
+	@Test
+	void saveAll_null_nothingExecuted() {
+		entityDao.saveAll(null);
 
 		Mockito.verify(entityManager, Mockito.never()).persist(Mockito.any());
 	}
@@ -161,8 +192,18 @@ public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
 		entityDao.save(entity);
 		assertThat(entityDao.existsById(entity.getUid())).isTrue();
 
-		entityDao.delete(entity);
+		boolean result = entityDao.delete(entity.getUid());
+
+		assertThat(result).isTrue();
 		assertThat(entityDao.existsById(entity.getUid())).isFalse();
+	}
+
+	@Test
+	void delete_null_nothingExecuted() {
+		boolean result = entityDao.delete(null);
+
+		assertThat(result).isFalse();
+		Mockito.verify(entityManager, Mockito.never()).remove(Mockito.any());
 	}
 
 	@Test

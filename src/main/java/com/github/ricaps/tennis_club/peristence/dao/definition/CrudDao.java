@@ -1,7 +1,6 @@
 package com.github.ricaps.tennis_club.peristence.dao.definition;
 
 import com.github.ricaps.tennis_club.peristence.entity.IdentifiedEntity;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -14,36 +13,37 @@ public interface CrudDao<EntityType extends IdentifiedEntity> {
 	 * @param entity entity to be saved
 	 * @return saved entity
 	 */
-	EntityType save(@Nonnull EntityType entity);
+	EntityType save(EntityType entity);
 
-	void saveAll(@Nonnull Collection<EntityType> entities);
+	void saveAll(Collection<EntityType> entities);
 
 	/**
 	 * Updates given entity
 	 * @param entity entity to be updated
 	 * @return updated entity
 	 */
-	EntityType update(@Nonnull EntityType entity);
+	EntityType update(EntityType entity);
 
 	/**
 	 * Deletes given entity
 	 * @param entity entity for deletion
+	 * @return true if the deletion was successful
 	 */
-	void delete(@Nonnull EntityType entity);
+	boolean delete(UUID entity);
 
 	/**
 	 * Returns entity based on the UUID
 	 * @param uuid uid of the entity
 	 * @return found entity
 	 */
-	Optional<EntityType> findById(@Nonnull UUID uuid);
+	Optional<EntityType> findById(UUID uuid);
 
 	/**
 	 * Checks database if entity with given ID exists
 	 * @param uuid id of the entity
 	 * @return true if entity exists, otherwise false
 	 */
-	boolean existsById(@Nonnull UUID uuid);
+	boolean existsById(UUID uuid);
 
 	/**
 	 * Returns count of all entities
