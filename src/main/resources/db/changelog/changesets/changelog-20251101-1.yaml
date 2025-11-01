@@ -1,0 +1,168 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1762011414112-1
+      author: martin
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_court
+                  name: uid
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: surface_uid
+                  type: UUID
+            tableName: court
+  - changeSet:
+      id: 1762011414112-2
+      author: martin
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_reservation
+                  name: uid
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: court_uid
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_uid
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: from
+                  type: DATETIME
+              - column:
+                  constraints:
+                    nullable: false
+                  name: to
+                  type: DATETIME
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_quad_game
+                  type: BOOLEAN
+              - column:
+                  name: total_price
+                  type: DECIMAL(10, 2)
+            tableName: reservation
+  - changeSet:
+      id: 1762011414112-3
+      author: martin
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_surface
+                  name: uid
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: price
+                  type: DECIMAL(10, 2)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: currency
+                  type: VARCHAR(3)
+            tableName: surface
+  - changeSet:
+      id: 1762011414112-4
+      author: martin
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_user_entity
+                  name: uid
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: family_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: phone_number
+                  type: VARCHAR(63)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: VARCHAR(255)
+            tableName: user_entity
+  - changeSet:
+      id: 1762011414112-5
+      author: martin
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: surface_uid
+            baseTableName: court
+            constraintName: FK_COURT_ON_SURFACE_UID
+            referencedColumnNames: uid
+            referencedTableName: surface
+  - changeSet:
+      id: 1762011414112-6
+      author: martin
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: court_uid
+            baseTableName: reservation
+            constraintName: FK_RESERVATION_ON_COURT_UID
+            referencedColumnNames: uid
+            referencedTableName: court
+  - changeSet:
+      id: 1762011414112-7
+      author: martin
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_uid
+            baseTableName: reservation
+            constraintName: FK_RESERVATION_ON_USER_UID
+            referencedColumnNames: uid
+            referencedTableName: user_entity
+
