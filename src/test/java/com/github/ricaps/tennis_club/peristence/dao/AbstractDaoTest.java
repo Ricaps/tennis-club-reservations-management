@@ -1,0 +1,144 @@
+package com.github.ricaps.tennis_club.peristence.dao;
+
+import com.github.ricaps.tennis_club.peristence.dao.definition.CrudDao;
+import com.github.ricaps.tennis_club.peristence.entity.IdentifiedEntity;
+import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@DataJpaTest
+@ExtendWith(MockitoExtension.class)
+public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
+
+	private final CrudDao<EntityType> entityDao;
+	@Autowired
+	@MockitoSpyBean
+	private EntityManager entityManager;
+
+	protected AbstractDaoTest(CrudDao<EntityType> surfaceDao) {
+		this.entityDao = surfaceDao;
+	}
+
+	protected abstract EntityType createEntity();
+
+	protected abstract void checkEntity(EntityType actualEntity, EntityType referenceEntity);
+
+	protected abstract EntityType updateEntity(EntityType entity);
+
+	@Test
+	void createSurface_savedSuccessfully() {
+		EntityType entity = createEntity();
+
+		entityDao.save(entity);
+		Optional<EntityType> surfaceOpt = entityDao.findById(entity.getUid());
+
+		assertThat(surfaceOpt).isPresent();
+
+		EntityType createdSurface = surfaceOpt.get();
+		checkEntity(createdSurface, entity);
+
+	}
+
+	@Test
+	void existsById_notExistingEntity_returnsFalse() {
+		boolean result = entityDao.existsById(UUID.randomUUID());
+
+		assertThat(result).isFalse();
+	}
+
+	@Test
+	void existsById_notExistingEntity_returnsTrue() {
+		EntityType entity = createEntity();
+
+		entityDao.save(entity);
+
+		boolean result = entityDao.existsById(UUID.randomUUID());
+
+		assertThat(result).isFalse();
+	}
+
+	@Test
+	void updateEntity_existingEntity_updatedSuccessfully() {
+		EntityType entity = createEntity();
+
+		entity = entityDao.save(entity);
+		EntityType updatedEntity = updateEntity(entity);
+		entityDao.update(entity);
+
+		Optional<EntityType> entityOptional = entityDao.findById(entity.getUid());
+		assertThat(entityOptional).isPresent();
+		checkEntity(entityOptional.get(), updatedEntity);
+	}
+
+	@Test
+	void updateEntity_notExistingEntity_created() {
+		EntityType entity = createEntity();
+
+		entityDao.update(entity);
+
+		Optional<EntityType> actual = entityDao.findById(entity.getUid());
+		assertThat(actual).isPresent();
+
+		checkEntity(actual.get(), entity);
+	}
+
+	@Test
+	void saveAll_emptyList_nothingIsSaved() {
+		entityDao.saveAll(List.of());
+
+		Mockito.verify(entityManager, Mockito.never()).persist(Mockito.any());
+	}
+
+	@Test
+	void saveAll_fewEntities_allAreSaved() {
+		List<EntityType> entities = List.of(createEntity(), createEntity());
+		entityDao.saveAll(entities);
+
+		assertThat(entityDao.findById(entities.getFirst().getUid())).isPresent().get().isEqualTo(entities.getFirst());
+		assertThat(entityDao.findById(entities.getLast().getUid())).isPresent().get().isEqualTo(entities.getLast());
+
+		Mockito.verify(entityManager, Mockito.times(1)).persist(entities.getFirst());
+		Mockito.verify(entityManager, Mockito.times(1)).persist(entities.getLast());
+		Mockito.verify(entityManager, Mockito.never()).flush();
+		Mockito.verify(entityManager, Mockito.never()).clear();
+	}
+
+	@Test
+	void saveAll_moreThan50Entities_allAreSavedBatched() {
+		List<EntityType> entities = new ArrayList<>();
+		for (int i = 0; i <= 50; i++) {
+			entities.add(createEntity());
+		}
+		entityDao.saveAll(entities);
+
+		assertThat(entityDao.count()).isEqualTo(entities.size());
+
+		Mockito.verify(entityManager, Mockito.times(entities.size())).persist(Mockito.any());
+		Mockito.verify(entityManager, Mockito.times(1)).flush();
+		Mockito.verify(entityManager, Mockito.times(1)).clear();
+	}
+
+	@Test
+	void delete_deleteEntity_successfullyDeleted() {
+		EntityType entity = createEntity();
+
+		entityDao.save(entity);
+		assertThat(entityDao.existsById(entity.getUid())).isTrue();
+
+		entityDao.delete(entity);
+		assertThat(entityDao.existsById(entity.getUid())).isFalse();
+	}
+
+}
