@@ -27,8 +27,8 @@ public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
 	@MockitoSpyBean
 	private EntityManager entityManager;
 
-	protected AbstractDaoTest(CrudDao<EntityType> surfaceDao) {
-		this.entityDao = surfaceDao;
+	protected AbstractDaoTest(CrudDao<EntityType> entityDao) {
+		this.entityDao = entityDao;
 	}
 
 	protected abstract EntityType createEntity();
