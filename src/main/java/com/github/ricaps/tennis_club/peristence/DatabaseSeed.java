@@ -1,9 +1,12 @@
 package com.github.ricaps.tennis_club.peristence;
 
-import com.github.ricaps.tennis_club.peristence.dao.SurfaceDaoImpl;
+import com.github.ricaps.tennis_club.peristence.dao.definition.CourtDao;
+import com.github.ricaps.tennis_club.peristence.dao.definition.SurfaceDao;
+import com.github.ricaps.tennis_club.peristence.entity.Court;
 import com.github.ricaps.tennis_club.peristence.entity.Surface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -17,10 +20,14 @@ import java.util.UUID;
 @Slf4j
 public class DatabaseSeed implements InitializingBean {
 
-	private final SurfaceDaoImpl surfaceDao;
+	private final SurfaceDao surfaceDao;
 
-	public DatabaseSeed(SurfaceDaoImpl surfaceDao) {
+	private final CourtDao courtDao;
+
+	@Autowired
+	public DatabaseSeed(SurfaceDao surfaceDao, CourtDao courtDao) {
 		this.surfaceDao = surfaceDao;
+		this.courtDao = courtDao;
 	}
 
 	private List<Surface> getSurfaces() {
@@ -39,11 +46,22 @@ public class DatabaseSeed implements InitializingBean {
 					.build());
 	}
 
+	private List<Court> getCourts(List<Surface> surfaces) {
+		return List.of(Court.builder().uid(UUID.randomUUID()).name("Court 1").surface(surfaces.getFirst()).build(),
+				Court.builder().uid(UUID.randomUUID()).name("Court 2").surface(surfaces.getLast()).build(),
+				Court.builder().uid(UUID.randomUUID()).name("Court 3").surface(surfaces.getFirst()).build(),
+				Court.builder().uid(UUID.randomUUID()).name("Court 4").surface(surfaces.getFirst()).build());
+	}
+
 	@Override
 	public void afterPropertiesSet() {
 		List<Surface> surfaces = getSurfaces();
 		surfaceDao.saveAll(surfaces);
 		log.info("Saved {} instances of Surface entity", surfaces.size());
+
+		List<Court> courts = getCourts(surfaces);
+		courtDao.saveAll(courts);
+		log.info("Saved {} instances of Court entity", courts.size());
 	}
 
 }
