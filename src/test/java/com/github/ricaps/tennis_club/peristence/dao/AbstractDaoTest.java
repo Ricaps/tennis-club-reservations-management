@@ -3,6 +3,8 @@ package com.github.ricaps.tennis_club.peristence.dao;
 import com.github.ricaps.tennis_club.peristence.dao.definition.CrudDao;
 import com.github.ricaps.tennis_club.peristence.entity.IdentifiedEntity;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaQuery;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -23,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
 
 	private final CrudDao<EntityType> entityDao;
+
 	@Autowired
 	@MockitoSpyBean
 	private EntityManager entityManager;
@@ -67,6 +70,27 @@ public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
 		boolean result = entityDao.existsById(UUID.randomUUID());
 
 		assertThat(result).isFalse();
+	}
+
+	@Test
+	void existsById_countReturnsNull_returnsFalse() {
+		mockSingleResultToReturnNull();
+
+		EntityType entity = createEntity();
+		entityDao.save(entity);
+
+		boolean result = entityDao.existsById(entity.getUid());
+
+		assertThat(result).isFalse();
+	}
+
+	@SuppressWarnings("unchecked")
+	private void mockSingleResultToReturnNull() {
+		TypedQuery<Long> queryMock = Mockito.mock(TypedQuery.class);
+
+		Mockito.doReturn(queryMock).when(entityManager).createQuery(Mockito.any(CriteriaQuery.class));
+
+		Mockito.when(queryMock.getSingleResult()).thenReturn(null);
 	}
 
 	@Test
@@ -139,6 +163,29 @@ public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
 
 		entityDao.delete(entity);
 		assertThat(entityDao.existsById(entity.getUid())).isFalse();
+	}
+
+	@Test
+	void count_noEntity_returnsZero() {
+		assertThat(entityDao.count()).isEqualTo(0);
+	}
+
+	@Test
+	void count_resultSetIsNull_returnsZero() {
+		mockSingleResultToReturnNull();
+
+		EntityType entity = createEntity();
+		entityDao.save(entity);
+
+		assertThat(entityDao.count()).isEqualTo(0);
+	}
+
+	@Test
+	void count_moreEntities_returnsCount() {
+		List<EntityType> entities = List.of(createEntity(), createEntity());
+		entityDao.saveAll(entities);
+
+		assertThat(entityDao.count()).isEqualTo(entities.size());
 	}
 
 }

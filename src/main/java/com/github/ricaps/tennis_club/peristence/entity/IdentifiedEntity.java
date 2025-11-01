@@ -47,4 +47,5 @@ abstract public class IdentifiedEntity {
 				? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
 				: getClass().hashCode();
 	}
+
 }
