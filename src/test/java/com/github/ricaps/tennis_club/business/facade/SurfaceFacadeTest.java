@@ -6,7 +6,7 @@ import com.github.ricaps.tennis_club.business.mapping.SurfaceMapper;
 import com.github.ricaps.tennis_club.business.service.definition.SurfaceService;
 import com.github.ricaps.tennis_club.exception.ValueIsMissingException;
 import com.github.ricaps.tennis_club.peristence.entity.Surface;
-import com.github.ricaps.tennis_club.test_utils.TestData;
+import com.github.ricaps.tennis_club.test_utils.SurfaceTestData;
 import com.github.ricaps.tennis_club.utils.UUIDUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,13 +36,6 @@ class SurfaceFacadeTest {
 	@InjectMocks
 	private SurfaceFacade surfaceFacade;
 
-	private static void compareViewAndCreate(SurfaceViewDto surfaceViewDto, SurfaceCreateDto createDto) {
-		assertThat(surfaceViewDto.uid()).isNotNull();
-		assertThat(surfaceViewDto.name()).isEqualTo(createDto.name());
-		assertThat(surfaceViewDto.currency()).isEqualTo(createDto.currency());
-		assertThat(surfaceViewDto.price()).isEqualTo(createDto.price());
-	}
-
 	@Test
 	void create_nullEntity_throwsException() {
 		assertThatThrownBy(() -> surfaceFacade.create(null)).isInstanceOf(ValueIsMissingException.class);
@@ -52,7 +45,7 @@ class SurfaceFacadeTest {
 
 	@Test
 	void create_allPropertiesGood_creationSuccessful() {
-		SurfaceCreateDto createDto = TestData.createSurfaceCreate();
+		SurfaceCreateDto createDto = SurfaceTestData.createSurfaceCreate();
 		Surface entity = Mockito.spy(surfaceMapper.fromCreateToEntity(createDto));
 		Mockito.reset(surfaceMapper);
 
@@ -61,7 +54,7 @@ class SurfaceFacadeTest {
 
 		SurfaceViewDto view = surfaceFacade.create(createDto);
 
-		compareViewAndCreate(view, createDto);
+		SurfaceTestData.compareViewAndCreate(view, createDto);
 		Mockito.verify(entity, Mockito.times(1)).setUid(Mockito.any());
 		Mockito.verify(surfaceMapper, Mockito.times(1)).fromCreateToEntity(createDto);
 		Mockito.verify(surfaceService, Mockito.times(1)).create(entity);
@@ -76,7 +69,7 @@ class SurfaceFacadeTest {
 
 	@Test
 	void get_allGood_returnsOptionalValue() {
-		SurfaceViewDto view = TestData.createSurfaceView(UUID.randomUUID());
+		SurfaceViewDto view = SurfaceTestData.createSurfaceView(UUID.randomUUID());
 		Surface entity = Mockito.mock(Surface.class);
 		Mockito.when(surfaceService.get(view.uid())).thenReturn(Optional.of(entity));
 		Mockito.when(surfaceMapper.fromEntityToView(entity)).thenReturn(view);
@@ -89,7 +82,7 @@ class SurfaceFacadeTest {
 
 	@Test
 	void get_notFound_returnsEmptyValue() {
-		SurfaceViewDto view = TestData.createSurfaceView(UUID.randomUUID());
+		SurfaceViewDto view = SurfaceTestData.createSurfaceView(UUID.randomUUID());
 		Mockito.when(surfaceService.get(view.uid())).thenReturn(Optional.empty());
 
 		Optional<SurfaceViewDto> returnedView = surfaceFacade.get(view.uid());
@@ -108,8 +101,8 @@ class SurfaceFacadeTest {
 
 	@Test
 	void getAll_allGood_returnsPage() {
-		SurfaceViewDto view1 = TestData.createSurfaceView(UUID.randomUUID());
-		SurfaceViewDto view2 = TestData.createSurfaceView(UUID.randomUUID());
+		SurfaceViewDto view1 = SurfaceTestData.createSurfaceView(UUID.randomUUID());
+		SurfaceViewDto view2 = SurfaceTestData.createSurfaceView(UUID.randomUUID());
 		List<SurfaceViewDto> viewList = List.of(view1, view2);
 
 		Pageable pageableMock = Mockito.mock(Pageable.class);
@@ -137,7 +130,7 @@ class SurfaceFacadeTest {
 
 	@Test
 	void update_nullUuid_throwsException() {
-		assertThatThrownBy(() -> surfaceFacade.update(null, TestData.createSurfaceCreate()))
+		assertThatThrownBy(() -> surfaceFacade.update(null, SurfaceTestData.createSurfaceCreate()))
 			.isInstanceOf(ValueIsMissingException.class);
 
 		Mockito.verify(surfaceService, Mockito.never()).update(Mockito.any());
@@ -145,7 +138,7 @@ class SurfaceFacadeTest {
 
 	@Test
 	void update_allPropertiesGood_updateSuccessful() {
-		SurfaceCreateDto createDto = TestData.createSurfaceCreate();
+		SurfaceCreateDto createDto = SurfaceTestData.createSurfaceCreate();
 		UUID uuid = UUIDUtils.generate();
 		Surface entity = Mockito.spy(surfaceMapper.fromCreateToEntity(uuid, createDto));
 

@@ -2,7 +2,7 @@ package com.github.ricaps.tennis_club.peristence.dao;
 
 import com.github.ricaps.tennis_club.peristence.dao.definition.SurfaceDao;
 import com.github.ricaps.tennis_club.peristence.entity.Surface;
-import com.github.ricaps.tennis_club.test_utils.TestData;
+import com.github.ricaps.tennis_club.test_utils.SurfaceTestData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
@@ -18,7 +18,7 @@ class SurfaceDaoImplIT extends AbstractDaoTest<Surface> {
 
 	@Override
 	protected Surface createEntity() {
-		return TestData.createSurface();
+		return SurfaceTestData.createSurface();
 	}
 
 	@Override
