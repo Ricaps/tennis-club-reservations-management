@@ -6,7 +6,7 @@ import com.github.ricaps.tennis_club.exception.ValueIsMissingException;
 import com.github.ricaps.tennis_club.peristence.dao.definition.SurfaceDao;
 import com.github.ricaps.tennis_club.peristence.entity.Surface;
 import com.github.ricaps.tennis_club.test_utils.MockUtils;
-import com.github.ricaps.tennis_club.test_utils.TestData;
+import com.github.ricaps.tennis_club.test_utils.SurfaceTestData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,7 +40,7 @@ class SurfaceServiceImplTest {
 
 	@Test
 	void create_nullUuid_throwsException() {
-		Surface surface = TestData.createSurface();
+		Surface surface = SurfaceTestData.createSurface();
 		surface.setUid(null);
 
 		assertThatThrownBy(() -> surfaceService.create(surface)).isInstanceOf(ValueIsMissingException.class);
@@ -50,7 +50,7 @@ class SurfaceServiceImplTest {
 
 	@Test
 	void create_entityExists_throwsException() {
-		Surface surface = TestData.createSurface();
+		Surface surface = SurfaceTestData.createSurface();
 		Mockito.when(surfaceDao.existsById(surface.getUid())).thenReturn(true);
 
 		assertThatThrownBy(() -> surfaceService.create(surface)).isInstanceOf(EntityExistsException.class);
@@ -59,7 +59,7 @@ class SurfaceServiceImplTest {
 
 	@Test
 	void create_allConditionsCorrect_creationSuccessful() {
-		Surface surface = TestData.createSurface();
+		Surface surface = SurfaceTestData.createSurface();
 		Mockito.when(surfaceDao.existsById(surface.getUid())).thenReturn(false);
 		Mockito.when(surfaceDao.save(surface)).thenReturn(surface);
 
@@ -78,7 +78,7 @@ class SurfaceServiceImplTest {
 
 	@Test
 	void get_notFoundEntity_returnsEmptyOptional() {
-		Surface surface = TestData.createSurface();
+		Surface surface = SurfaceTestData.createSurface();
 		Mockito.when(surfaceDao.findById(surface.getUid())).thenReturn(Optional.empty());
 
 		Optional<Surface> result = surfaceService.get(surface.getUid());
@@ -89,7 +89,7 @@ class SurfaceServiceImplTest {
 
 	@Test
 	void get_foundEntity_returnsPresentOptional() {
-		Surface surface = TestData.createSurface();
+		Surface surface = SurfaceTestData.createSurface();
 		Mockito.when(surfaceDao.findById(surface.getUid())).thenReturn(Optional.of(surface));
 
 		Optional<Surface> result = surfaceService.get(surface.getUid());
@@ -107,8 +107,8 @@ class SurfaceServiceImplTest {
 
 	@Test
 	void getAll_correctInput_returnsMultipleEntities() {
-		Surface surface1 = TestData.createSurface();
-		Surface surface2 = TestData.createSurface();
+		Surface surface1 = SurfaceTestData.createSurface();
+		Surface surface2 = SurfaceTestData.createSurface();
 
 		int pageNumber = 1;
 		int pageSize = 10;
@@ -133,7 +133,7 @@ class SurfaceServiceImplTest {
 
 	@Test
 	void update_nullUuid_throwsException() {
-		Surface surface = TestData.createSurface();
+		Surface surface = SurfaceTestData.createSurface();
 		surface.setUid(null);
 
 		assertThatThrownBy(() -> surfaceService.update(surface)).isInstanceOf(ValueIsMissingException.class);
@@ -143,7 +143,7 @@ class SurfaceServiceImplTest {
 
 	@Test
 	void update_entityNotExists_throwsException() {
-		Surface surface = TestData.createSurface();
+		Surface surface = SurfaceTestData.createSurface();
 		Mockito.when(surfaceDao.existsById(surface.getUid())).thenReturn(false);
 
 		assertThatThrownBy(() -> surfaceService.update(surface)).isInstanceOf(EntityNotExistsException.class);
@@ -152,7 +152,7 @@ class SurfaceServiceImplTest {
 
 	@Test
 	void update_allConditionsCorrect_updateSuccessful() {
-		Surface surface = TestData.createSurface();
+		Surface surface = SurfaceTestData.createSurface();
 		Mockito.when(surfaceDao.existsById(surface.getUid())).thenReturn(true);
 		Mockito.when(surfaceDao.update(surface)).thenReturn(surface);
 
@@ -171,7 +171,7 @@ class SurfaceServiceImplTest {
 
 	@Test
 	void delete_entityNotExists_throwsException() {
-		Surface surface = TestData.createSurface();
+		Surface surface = SurfaceTestData.createSurface();
 		Mockito.when(surfaceDao.existsById(surface.getUid())).thenReturn(false);
 
 		assertThatThrownBy(() -> surfaceService.delete(surface.getUid())).isInstanceOf(EntityNotExistsException.class);
@@ -180,7 +180,7 @@ class SurfaceServiceImplTest {
 
 	@Test
 	void delete_allConditionsCorrect_deleteSuccessful() {
-		Surface surface = TestData.createSurface();
+		Surface surface = SurfaceTestData.createSurface();
 		Mockito.when(surfaceDao.existsById(surface.getUid())).thenReturn(true);
 
 		surfaceService.delete(surface.getUid());

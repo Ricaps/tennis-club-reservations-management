@@ -203,6 +203,7 @@ public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
 
 		assertThat(result).isTrue();
 		assertThat(entityDao.existsById(entity.getUid())).isFalse();
+		assertThat(entityDao.findById(entity.getUid())).isEmpty();
 	}
 
 	@Test

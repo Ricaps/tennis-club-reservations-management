@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Transactional
 public abstract class AbstractDao<EntityType extends IdentifiedEntity> implements CrudDao<EntityType> {
 
 	private static final int BATCH_SIZE = 50;
@@ -50,7 +51,6 @@ public abstract class AbstractDao<EntityType extends IdentifiedEntity> implement
 	}
 
 	@Override
-	@Transactional
 	public void saveAll(Collection<EntityType> entities) {
 		if (entities == null) {
 			return;
@@ -91,6 +91,7 @@ public abstract class AbstractDao<EntityType extends IdentifiedEntity> implement
 
 		int deleted = entityManager.createQuery(deleteCriteria).executeUpdate();
 
+		entityManager.flush();
 		return deleted == 1;
 	}
 
@@ -100,7 +101,20 @@ public abstract class AbstractDao<EntityType extends IdentifiedEntity> implement
 			return Optional.empty();
 		}
 
-		return Optional.ofNullable(entityManager.find(getEntityClass(), uuid));
+		// EntityManager.find() doesn't respect soft delete. So use criteria.
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<EntityType> criteriaQuery = criteriaBuilder.createQuery(getEntityClass());
+		Root<EntityType> root = criteriaQuery.from(getEntityClass());
+
+		criteriaQuery.where(criteriaBuilder.equal(root.get("uid"), uuid));
+
+		List<EntityType> entityList = entityManager.createQuery(criteriaQuery).getResultList();
+
+		if (entityList.size() == 1) {
+			return Optional.of(entityList.getFirst());
+		}
+
+		return Optional.empty();
 	}
 
 	@Override
