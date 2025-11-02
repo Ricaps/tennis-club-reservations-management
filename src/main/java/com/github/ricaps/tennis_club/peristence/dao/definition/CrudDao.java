@@ -61,4 +61,5 @@ public interface CrudDao<EntityType extends IdentifiedEntity> {
 	 * @return number of entities as Long
 	 */
 	long count();
+
 }

@@ -2,12 +2,9 @@ package com.github.ricaps.tennis_club.peristence.dao;
 
 import com.github.ricaps.tennis_club.peristence.dao.definition.SurfaceDao;
 import com.github.ricaps.tennis_club.peristence.entity.Surface;
+import com.github.ricaps.tennis_club.test_utils.TestData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
-
-import java.math.BigDecimal;
-import java.util.Currency;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,12 +18,7 @@ class SurfaceDaoImplIT extends AbstractDaoTest<Surface> {
 
 	@Override
 	protected Surface createEntity() {
-		return Surface.builder()
-			.name("test")
-			.price(new BigDecimal("12.5"))
-			.uid(UUID.randomUUID())
-			.currency(Currency.getInstance("CZK"))
-			.build();
+		return TestData.createSurface();
 	}
 
 	@Override

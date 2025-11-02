@@ -304,6 +304,4 @@ public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
 		assertThat(result).isEmpty();
 	}
 
-
-
 }
