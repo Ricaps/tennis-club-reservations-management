@@ -50,7 +50,7 @@ public class DatabaseSeed implements InitializingBean {
 		return List.of(Court.builder().uid(UUID.randomUUID()).name("Court 1").surface(surfaces.getFirst()).build(),
 				Court.builder().uid(UUID.randomUUID()).name("Court 2").surface(surfaces.getLast()).build(),
 				Court.builder().uid(UUID.randomUUID()).name("Court 3").surface(surfaces.getFirst()).build(),
-				Court.builder().uid(UUID.randomUUID()).name("Court 4").surface(surfaces.getFirst()).build());
+				Court.builder().uid(UUID.randomUUID()).name("Court 4").surface(surfaces.getLast()).build());
 	}
 
 	@Override
