@@ -1,50 +1,48 @@
 package com.github.ricaps.tennis_club.business.service;
 
+import com.github.ricaps.tennis_club.business.service.definition.CourtService;
 import com.github.ricaps.tennis_club.business.service.definition.GenericService;
-import com.github.ricaps.tennis_club.business.service.definition.SurfaceService;
 import com.github.ricaps.tennis_club.exception.EntityNotExistsException;
-import com.github.ricaps.tennis_club.peristence.dao.definition.SurfaceDao;
-import com.github.ricaps.tennis_club.peristence.entity.Surface;
+import com.github.ricaps.tennis_club.peristence.dao.definition.CourtDao;
+import com.github.ricaps.tennis_club.peristence.entity.Court;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Transactional
-public class SurfaceServiceImpl implements SurfaceService {
+public class CourtServiceImpl implements CourtService {
 
-	private final GenericService<Surface> genericService;
+	private final GenericService<Court> genericService;
 
-	public SurfaceServiceImpl(SurfaceDao surfaceDao) {
-		this.genericService = new GenericService<>(surfaceDao, Surface.class);
+	public CourtServiceImpl(CourtDao courtDao) {
+		this.genericService = new GenericService<>(courtDao, Court.class);
 	}
 
 	@Override
-	public Surface create(Surface entity) {
+	public Court create(Court entity) {
 		return genericService.create(entity);
 	}
 
 	@Override
-	public Optional<Surface> get(UUID uid) {
+	public Optional<Court> get(UUID uid) {
 		return genericService.get(uid);
 	}
 
 	@Override
-	public Surface getReference(UUID uuid) throws EntityNotExistsException {
+	public Court getReference(UUID uuid) throws EntityNotExistsException {
 		return genericService.getReference(uuid);
 	}
 
 	@Override
-	public List<Surface> getAll(Pageable pageable) {
+	public List<Court> getAll(Pageable pageable) {
 		return genericService.getAll(pageable);
 	}
 
 	@Override
-	public Surface update(Surface entity) {
+	public Court update(Court entity) {
 		return genericService.update(entity);
 	}
 

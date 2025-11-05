@@ -1,5 +1,6 @@
 package com.github.ricaps.tennis_club.business.service.definition;
 
+import com.github.ricaps.tennis_club.exception.EntityNotExistsException;
 import com.github.ricaps.tennis_club.peristence.entity.IdentifiedEntity;
 import org.springframework.data.domain.Pageable;
 
@@ -22,6 +23,14 @@ public interface CrudService<EntityType extends IdentifiedEntity> {
 	 * @return entity wrapper in {@link Optional}
 	 */
 	Optional<EntityType> get(UUID uid);
+
+	/**
+	 * Gets lazy reference of an Entity. <br>
+	 * If entity doesn't exist, throws {@link EntityNotExistsException}
+	 * @param uuid identifier of an entity
+	 * @return lazy reference to an entity
+	 */
+	EntityType getReference(UUID uuid) throws EntityNotExistsException;
 
 	/**
 	 * Get all entities paged.

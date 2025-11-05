@@ -113,8 +113,16 @@ public abstract class AbstractDao<EntityType extends IdentifiedEntity> implement
 		if (entityList.size() == 1) {
 			return Optional.of(entityList.getFirst());
 		}
-
 		return Optional.empty();
+	}
+
+	@Override
+	public EntityType findReferenceById(UUID uuid) {
+		if (uuid == null) {
+			return null;
+		}
+
+		return entityManager.getReference(getEntityClass(), uuid);
 	}
 
 	@Override

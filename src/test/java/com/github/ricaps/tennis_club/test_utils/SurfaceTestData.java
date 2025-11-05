@@ -3,6 +3,7 @@ package com.github.ricaps.tennis_club.test_utils;
 import com.github.ricaps.tennis_club.api.surface.SurfaceCreateDto;
 import com.github.ricaps.tennis_club.api.surface.SurfaceViewDto;
 import com.github.ricaps.tennis_club.peristence.entity.Surface;
+import com.github.ricaps.tennis_club.utils.UUIDUtils;
 
 import java.math.BigDecimal;
 import java.util.Currency;
@@ -16,13 +17,17 @@ public class SurfaceTestData {
 		super();
 	}
 
-	public static Surface createSurface() {
+	public static Surface createSurface(UUID surfaceUID) {
 		return Surface.builder()
 			.name("test")
 			.price(new BigDecimal("12.50"))
-			.uid(UUID.randomUUID())
+			.uid(surfaceUID)
 			.currency(Currency.getInstance("CZK"))
 			.build();
+	}
+
+	public static Surface createSurface() {
+		return createSurface(UUIDUtils.generate());
 	}
 
 	public static SurfaceCreateDto createSurfaceCreate() {

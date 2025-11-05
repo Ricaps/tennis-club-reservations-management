@@ -2,6 +2,8 @@ package com.github.ricaps.tennis_club.peristence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -23,6 +25,7 @@ public class Court extends IdentifiedEntity {
 	private String name;
 
 	@ManyToOne(optional = false)
+	@JoinColumn(foreignKey = @ForeignKey(name = "FK_COURT_ON_SURFACE_UID"))
 	private Surface surface;
 
 }

@@ -21,4 +21,4 @@ server:
     context-path: "/api"
 
 database:
-  seed: true
+  seed: false
