@@ -41,6 +41,13 @@ public interface CrudDao<EntityType extends IdentifiedEntity> {
 	Optional<EntityType> findById(UUID uuid);
 
 	/**
+	 * Gets lazy proxy of an entity
+	 * @param uuid uid of an entity
+	 * @return entity reference
+	 */
+	EntityType findReferenceById(UUID uuid);
+
+	/**
 	 * Returns all entities pageable
 	 * @param pageNumber page number
 	 * @param pageSize size of requested page
