@@ -22,3 +22,7 @@ server:
 
 database:
   seed: true
+
+jwt:
+  secret: mySuperLongSecretKeyValueThatHasAtLeastThirtyTwoCharacters
+  expiration: 900000
