@@ -32,15 +32,19 @@ public class SecuritySupport {
 	@Autowired
 	WebApplicationContext context;
 
-	public MockMvc saveUserAndGetMvc() {
+	public TestSecurityContext defineUserAndGetMvc(boolean saveUser) {
 		User user = UserTestData.entity();
-		userDao.save(user);
+		if (saveUser) {
+			userDao.save(user);
+		}
 
 		String token = jwtUtils.generateAccessToken(user);
-		return MockMvcBuilders.webAppContextSetup(context)
+		MockMvc mvc = MockMvcBuilders.webAppContextSetup(context)
 			.defaultRequest(get("/").header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
 			.apply(SecurityMockMvcConfigurers.springSecurity())
 			.build();
+
+		return new TestSecurityContext(mvc, token);
 	}
 
 	public MockMvc createFakeAuthMvc(Set<Role> roles) {
@@ -55,6 +59,9 @@ public class SecuritySupport {
 			.defaultRequest(get("/").header(HttpHeaders.AUTHORIZATION, "Bearer " + token).with(authentication(auth)))
 			.apply(SecurityMockMvcConfigurers.springSecurity())
 			.build();
+	}
+
+	public static record TestSecurityContext(MockMvc mockMvc, String token) {
 	}
 
 }

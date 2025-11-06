@@ -49,4 +49,5 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
 		return Optional.of(users.getFirst());
 	}
+
 }

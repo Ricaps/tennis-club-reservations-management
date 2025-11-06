@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class UserDaoImplTest extends AbstractDaoTest<User> {
 
 	private final UserDao userDao;
+
 	@Autowired
 	private EntityManager entityManager;
 
