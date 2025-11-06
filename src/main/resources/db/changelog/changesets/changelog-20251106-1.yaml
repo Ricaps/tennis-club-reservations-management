@@ -26,5 +26,12 @@ databaseChangeLog:
             constraintName: fk_user_roles_on_user
             referencedColumnNames: uid
             referencedTableName: user_entity
-
+  - changeSet:
+      id: 1762413034-3
+      author: martin
+      changes:
+        - addUniqueConstraint:
+            tableName: user_entity
+            columnNames: phone_number
+            constraintName: phone_number_unique_user_entity
 
