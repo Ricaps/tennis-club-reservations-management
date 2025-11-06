@@ -35,7 +35,7 @@ public class User extends IdentifiedEntity {
 	@Column(nullable = false)
 	private String familyName;
 
-	@Column(nullable = false, length = 63)
+	@Column(nullable = false, length = 63, unique = true)
 	private String phoneNumber;
 
 	@Column(nullable = false)

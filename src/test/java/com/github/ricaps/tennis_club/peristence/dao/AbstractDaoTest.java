@@ -28,8 +28,8 @@ public abstract class AbstractDaoTest<EntityType extends IdentifiedEntity> {
 
 	private final CrudDao<EntityType> entityDao;
 
-	@Autowired
 	@MockitoSpyBean
+	@Autowired
 	private EntityManager entityManager;
 
 	protected AbstractDaoTest(CrudDao<EntityType> entityDao) {
