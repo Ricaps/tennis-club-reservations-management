@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1762413034-1
+      author: martin
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_uid
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: role
+                  type: VARCHAR(255)
+            tableName: user_roles
+  - changeSet:
+      id: 1762413034-2
+      author: martin
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_uid
+            baseTableName: user_roles
+            constraintName: fk_user_roles_on_user
+            referencedColumnNames: uid
+            referencedTableName: user_entity
+
+
