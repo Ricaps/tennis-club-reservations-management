@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface UserService extends CrudService<User> {
 
 	Optional<User> getByPhoneNumber(String phoneNumber);
+
 }

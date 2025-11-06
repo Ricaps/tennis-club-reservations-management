@@ -24,7 +24,9 @@ import java.util.Set;
 public class AuthServiceImpl implements AuthService {
 
 	public static final String BASIC_PREFIX = "Basic ";
+
 	private static final Role DEFAULT_ROLE = Role.USER;
+
 	private static final String WRONG_COMBINATION_ERROR = "This combination of user and password doesn't exist!";
 
 	private final UserService userService;
