@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,9 @@ class UserFacadeTest {
 	@Mock
 	private UserService userService;
 
+	@Mock
+	private PasswordEncoder passwordEncoder;
+
 	@InjectMocks
 	private UserFacade userFacade;
 
@@ -45,12 +49,14 @@ class UserFacadeTest {
 
 	@Test
 	void create_allPropertiesGood_creationSuccessful() {
+		String encodedPassword = "encoded_password";
 		UserCreateDto createDto = UserTestData.createUser(true);
 		User entity = Mockito.spy(userMapper.fromCreateToEntity(createDto));
 		Mockito.reset(userMapper);
 
 		Mockito.when(userMapper.fromCreateToEntity(createDto)).thenReturn(entity);
 		Mockito.when(userService.create(Mockito.any())).thenReturn(entity);
+		Mockito.when(passwordEncoder.encode(createDto.password())).thenReturn(encodedPassword);
 
 		UserViewDto view = userFacade.create(createDto);
 

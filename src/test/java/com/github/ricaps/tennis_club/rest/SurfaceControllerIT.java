@@ -5,13 +5,15 @@ import com.github.ricaps.tennis_club.api.surface.SurfaceCreateDto;
 import com.github.ricaps.tennis_club.api.surface.SurfaceViewDto;
 import com.github.ricaps.tennis_club.business.facade.SurfaceFacade;
 import com.github.ricaps.tennis_club.peristence.dao.definition.SurfaceDao;
+import com.github.ricaps.tennis_club.peristence.entity.Role;
 import com.github.ricaps.tennis_club.peristence.entity.Surface;
+import com.github.ricaps.tennis_club.test_utils.SecuritySupport;
 import com.github.ricaps.tennis_club.test_utils.SurfaceTestData;
 import com.github.ricaps.tennis_club.utils.UUIDUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
@@ -19,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,11 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @Transactional
 class SurfaceControllerIT {
 
-	@Autowired
 	MockMvc mockMvc;
 
 	@Autowired
@@ -42,6 +43,14 @@ class SurfaceControllerIT {
 
 	@Autowired
 	ObjectMapper objectMapper;
+
+	@Autowired
+	SecuritySupport securitySupport;
+
+	@BeforeEach
+	void setup() {
+		mockMvc = securitySupport.createFakeAuthMvc(Set.of(Role.USER, Role.ADMIN));
+	}
 
 	@Test
 	void create_correctCreation_returnsData() throws Exception {

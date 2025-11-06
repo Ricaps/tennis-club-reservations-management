@@ -88,4 +88,10 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public Optional<User> getByPhoneNumber(String phoneNumber) {
+		ValidationHelper.requireNonNull(phoneNumber, "Phone number cannot be null!");
+
+		return userDao.findByPhoneNumber(phoneNumber);
+	}
 }

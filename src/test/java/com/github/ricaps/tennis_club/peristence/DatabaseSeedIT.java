@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(properties = "database.seed=true")
+@SpringBootTest(properties = { "database.seed=true", "spring.datasource.url=jdbc:h2:mem:seed-test;DB_CLOSE_DELAY=-1" })
 @Transactional
 class DatabaseSeedIT {
 

@@ -2,6 +2,7 @@ package com.github.ricaps.tennis_club.test_utils;
 
 import com.github.ricaps.tennis_club.api.user.RoleDto;
 import com.github.ricaps.tennis_club.api.user.UserCreateDto;
+import com.github.ricaps.tennis_club.api.user.UserRegisterDto;
 import com.github.ricaps.tennis_club.api.user.UserViewDto;
 import com.github.ricaps.tennis_club.peristence.entity.Role;
 import com.github.ricaps.tennis_club.peristence.entity.User;
@@ -32,7 +33,7 @@ public class UserTestData {
 			.password("12345")
 			.phoneNumber(randomPhone ? getRandomPhoneNumber() : "777777777")
 			.uid(UUID.randomUUID())
-			.roles(new HashSet<>(List.of(Role.USER)))
+			.roles(new HashSet<>(List.of(Role.USER, Role.ADMIN)))
 			.build();
 	}
 
@@ -44,6 +45,10 @@ public class UserTestData {
 	public static UserCreateDto createInvalid(boolean randomPhone) {
 		return new UserCreateDto("John", "", randomPhone ? getRandomPhoneNumber() : "777777777", "123456",
 				Set.of(RoleDto.USER));
+	}
+
+	public static UserRegisterDto createRegister(boolean randomPhone) {
+		return new UserRegisterDto("John", "Doe", randomPhone ? getRandomPhoneNumber() : "777777777", "123456");
 	}
 
 	public static UserViewDto viewUser(UUID uuid) {

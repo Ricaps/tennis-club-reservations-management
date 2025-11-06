@@ -2,17 +2,22 @@ package com.github.ricaps.tennis_club.peristence;
 
 import com.github.ricaps.tennis_club.peristence.dao.definition.CourtDao;
 import com.github.ricaps.tennis_club.peristence.dao.definition.SurfaceDao;
+import com.github.ricaps.tennis_club.peristence.dao.definition.UserDao;
 import com.github.ricaps.tennis_club.peristence.entity.Court;
+import com.github.ricaps.tennis_club.peristence.entity.Role;
 import com.github.ricaps.tennis_club.peristence.entity.Surface;
+import com.github.ricaps.tennis_club.peristence.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Component
@@ -24,10 +29,16 @@ public class DatabaseSeed implements InitializingBean {
 
 	private final CourtDao courtDao;
 
+	private final UserDao userDao;
+
+	private final PasswordEncoder passwordEncoder;
+
 	@Autowired
-	public DatabaseSeed(SurfaceDao surfaceDao, CourtDao courtDao) {
+	public DatabaseSeed(SurfaceDao surfaceDao, CourtDao courtDao, UserDao userDao, PasswordEncoder passwordEncoder) {
 		this.surfaceDao = surfaceDao;
 		this.courtDao = courtDao;
+		this.userDao = userDao;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	private List<Surface> getSurfaces() {
@@ -53,6 +64,17 @@ public class DatabaseSeed implements InitializingBean {
 				Court.builder().uid(UUID.randomUUID()).name("Court 4").surface(surfaces.getLast()).build());
 	}
 
+	private List<User> getUsers() {
+		return List.of(User.builder()
+			.uid(UUID.randomUUID())
+			.phoneNumber("+420111111112")
+			.firstName("John")
+			.familyName("Doe")
+			.password(passwordEncoder.encode("12345"))
+			.roles(Set.of(Role.USER, Role.ADMIN))
+			.build());
+	}
+
 	@Override
 	public void afterPropertiesSet() {
 		List<Surface> surfaces = getSurfaces();
@@ -62,6 +84,10 @@ public class DatabaseSeed implements InitializingBean {
 		List<Court> courts = getCourts(surfaces);
 		courtDao.saveAll(courts);
 		log.info("Saved {} instances of Court entity", courts.size());
+
+		List<User> users = getUsers();
+		userDao.saveAll(users);
+		log.info("Save {} instances of User entity", users.size());
 	}
 
 }
