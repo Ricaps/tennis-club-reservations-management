@@ -61,21 +61,33 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
-                  name: from
-                  type: DATETIME
+                  name: from_time
+                  type: timestamptz
               - column:
                   constraints:
                     nullable: false
-                  name: to
-                  type: DATETIME
+                  name: to_time
+                  type: timestamptz
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: timestamptz
               - column:
                   constraints:
                     nullable: false
                   name: is_quad_game
                   type: BOOLEAN
               - column:
-                  name: total_price
+                  constraints:
+                    nullable: false
+                  name: amount
                   type: DECIMAL(10, 2)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: currency
+                  type: VARCHAR(3)
             tableName: reservation
   - changeSet:
       id: 1762013073993-3
