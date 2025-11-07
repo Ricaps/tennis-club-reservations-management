@@ -1,9 +1,10 @@
 package com.github.ricaps.tennis_club.test_utils;
 
 import com.github.ricaps.tennis_club.api.user.RoleDto;
+import com.github.ricaps.tennis_club.api.user.UserBasicView;
 import com.github.ricaps.tennis_club.api.user.UserCreateDto;
+import com.github.ricaps.tennis_club.api.user.UserDetailedView;
 import com.github.ricaps.tennis_club.api.user.UserRegisterDto;
-import com.github.ricaps.tennis_club.api.user.UserViewDto;
 import com.github.ricaps.tennis_club.peristence.entity.Role;
 import com.github.ricaps.tennis_club.peristence.entity.User;
 
@@ -51,11 +52,15 @@ public class UserTestData {
 		return new UserRegisterDto("John", "Doe", randomPhone ? getRandomPhoneNumber() : "777777777", "123456");
 	}
 
-	public static UserViewDto viewUser(UUID uuid) {
-		return new UserViewDto(uuid, "John", "Doe", "777777777", Set.of(RoleDto.USER));
+	public static UserDetailedView viewUser(UUID uuid) {
+		return new UserDetailedView(uuid, "John", "Doe", "777777777", Set.of(RoleDto.USER));
 	}
 
-	public static void compareViewAndCreate(UserViewDto userViewDto, UserCreateDto createDto) {
+	public static UserBasicView viewBasicUser(UUID uuid) {
+		return new UserBasicView(uuid, "John", "Doe", "777777777");
+	}
+
+	public static void compareViewAndCreate(UserDetailedView userViewDto, UserCreateDto createDto) {
 		assertThat(userViewDto.uid()).isNotNull();
 		assertThat(userViewDto.firstName()).isEqualTo(createDto.firstName());
 		assertThat(userViewDto.familyName()).isEqualTo(createDto.familyName());
@@ -63,12 +68,19 @@ public class UserTestData {
 		assertThat(userViewDto.roles()).isEqualTo(createDto.roles());
 	}
 
-	public static void compareViewAndEntity(UserViewDto viewDto, User entity) {
+	public static void compareViewAndEntity(UserDetailedView viewDto, User entity) {
 		assertThat(viewDto.uid()).isEqualTo(entity.getUid());
 		assertThat(viewDto.firstName()).isEqualTo(entity.getFirstName());
 		assertThat(viewDto.familyName()).isEqualTo(entity.getFamilyName());
 		assertThat(viewDto.phoneNumber()).isEqualTo(entity.getPhoneNumber());
 		assertThat(dtoRolesToEntity(viewDto.roles())).isEqualTo(entity.getRoles());
+	}
+
+	public static void compareViewAndEntity(UserBasicView viewDto, User entity) {
+		assertThat(viewDto.uid()).isEqualTo(entity.getUid());
+		assertThat(viewDto.firstName()).isEqualTo(entity.getFirstName());
+		assertThat(viewDto.familyName()).isEqualTo(entity.getFamilyName());
+		assertThat(viewDto.phoneNumber()).isEqualTo(entity.getPhoneNumber());
 	}
 
 	private static Set<Role> dtoRolesToEntity(Set<RoleDto> roleDtos) {

@@ -1,7 +1,7 @@
 package com.github.ricaps.tennis_club.rest;
 
 import com.github.ricaps.tennis_club.api.user.UserCreateDto;
-import com.github.ricaps.tennis_club.api.user.UserViewDto;
+import com.github.ricaps.tennis_club.api.user.UserDetailedView;
 import com.github.ricaps.tennis_club.business.facade.UserFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -49,8 +49,8 @@ public class UserManagementController {
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
 			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
 	@PostMapping
-	public ResponseEntity<UserViewDto> create(@RequestBody @Valid UserCreateDto userCreateDto) {
-		UserViewDto userViewDto = userFacade.create(userCreateDto);
+	public ResponseEntity<UserDetailedView> create(@RequestBody @Valid UserCreateDto userCreateDto) {
+		UserDetailedView userViewDto = userFacade.create(userCreateDto);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(userViewDto);
 	}
@@ -62,8 +62,8 @@ public class UserManagementController {
 			@ApiResponse(responseCode = "400", description = "Validation of input request failed"),
 			@ApiResponse(responseCode = "404", description = "User not found") })
 	@GetMapping("/{uid}")
-	public ResponseEntity<UserViewDto> get(@PathVariable UUID uid) {
-		Optional<UserViewDto> userView = userFacade.get(uid);
+	public ResponseEntity<UserDetailedView> get(@PathVariable UUID uid) {
+		Optional<UserDetailedView> userView = userFacade.get(uid);
 
 		return ResponseEntity.of(userView);
 	}
@@ -75,9 +75,9 @@ public class UserManagementController {
 			@ApiResponse(responseCode = "400", description = "Validation of input request failed"), })
 	@GetMapping
 	@PageableAsQueryParam
-	public ResponseEntity<PagedModel<UserViewDto>> get(
+	public ResponseEntity<PagedModel<UserDetailedView>> get(
 			@ParameterObject @PageableDefault(sort = { "familyName" }) Pageable pageable) {
-		PagedModel<UserViewDto> usersPaged = userFacade.getAll(pageable);
+		PagedModel<UserDetailedView> usersPaged = userFacade.getAll(pageable);
 
 		return ResponseEntity.ok(usersPaged);
 	}
@@ -88,8 +88,9 @@ public class UserManagementController {
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
 			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
 	@PutMapping("/{uid}")
-	public ResponseEntity<UserViewDto> update(@PathVariable UUID uid, @RequestBody @Valid UserCreateDto userCreateDto) {
-		UserViewDto userView = userFacade.update(uid, userCreateDto);
+	public ResponseEntity<UserDetailedView> update(@PathVariable UUID uid,
+			@RequestBody @Valid UserCreateDto userCreateDto) {
+		UserDetailedView userView = userFacade.update(uid, userCreateDto);
 
 		return ResponseEntity.status(HttpStatus.OK).body(userView);
 	}
@@ -98,7 +99,7 @@ public class UserManagementController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "User deleted successfully"),
 			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
 	@DeleteMapping("/{uid}")
-	public ResponseEntity<UserViewDto> delete(@PathVariable UUID uid) {
+	public ResponseEntity<UserDetailedView> delete(@PathVariable UUID uid) {
 		userFacade.delete(uid);
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

@@ -1,7 +1,7 @@
 package com.github.ricaps.tennis_club.business.facade;
 
 import com.github.ricaps.tennis_club.api.user.UserCreateDto;
-import com.github.ricaps.tennis_club.api.user.UserViewDto;
+import com.github.ricaps.tennis_club.api.user.UserDetailedView;
 import com.github.ricaps.tennis_club.business.mapping.UserMapper;
 import com.github.ricaps.tennis_club.business.service.definition.UserService;
 import com.github.ricaps.tennis_club.exception.ValueIsMissingException;
@@ -58,7 +58,7 @@ class UserFacadeTest {
 		Mockito.when(userService.create(Mockito.any())).thenReturn(entity);
 		Mockito.when(passwordEncoder.encode(createDto.password())).thenReturn(encodedPassword);
 
-		UserViewDto view = userFacade.create(createDto);
+		UserDetailedView view = userFacade.create(createDto);
 
 		UserTestData.compareViewAndCreate(view, createDto);
 		Mockito.verify(entity, Mockito.times(1)).setUid(Mockito.any());
@@ -74,12 +74,12 @@ class UserFacadeTest {
 
 	@Test
 	void get_allGood_returnsOptionalValue() {
-		UserViewDto view = UserTestData.viewUser(UUID.randomUUID());
+		UserDetailedView view = UserTestData.viewUser(UUID.randomUUID());
 		User entity = Mockito.mock(User.class);
 		Mockito.when(userService.get(view.uid())).thenReturn(Optional.of(entity));
 		Mockito.when(userMapper.fromEntityToView(entity)).thenReturn(view);
 
-		Optional<UserViewDto> returnedView = userFacade.get(view.uid());
+		Optional<UserDetailedView> returnedView = userFacade.get(view.uid());
 
 		assertThat(returnedView).isPresent().get().isEqualTo(view);
 		Mockito.verify(userService, Mockito.times(1)).get(view.uid());
@@ -87,10 +87,10 @@ class UserFacadeTest {
 
 	@Test
 	void get_notFound_returnsEmptyValue() {
-		UserViewDto view = UserTestData.viewUser(UUID.randomUUID());
+		UserDetailedView view = UserTestData.viewUser(UUID.randomUUID());
 		Mockito.when(userService.get(view.uid())).thenReturn(Optional.empty());
 
-		Optional<UserViewDto> returnedView = userFacade.get(view.uid());
+		Optional<UserDetailedView> returnedView = userFacade.get(view.uid());
 
 		assertThat(returnedView).isEmpty();
 		Mockito.verify(userMapper, Mockito.never()).fromEntityToView(Mockito.any());
@@ -106,9 +106,9 @@ class UserFacadeTest {
 
 	@Test
 	void getAll_allGood_returnsPage() {
-		UserViewDto view1 = UserTestData.viewUser(UUID.randomUUID());
-		UserViewDto view2 = UserTestData.viewUser(UUID.randomUUID());
-		List<UserViewDto> viewList = List.of(view1, view2);
+		UserDetailedView view1 = UserTestData.viewUser(UUID.randomUUID());
+		UserDetailedView view2 = UserTestData.viewUser(UUID.randomUUID());
+		List<UserDetailedView> viewList = List.of(view1, view2);
 
 		Pageable pageableMock = Mockito.mock(Pageable.class);
 
@@ -118,7 +118,7 @@ class UserFacadeTest {
 		Mockito.when(userService.getAll(pageableMock)).thenReturn(entitiesList);
 		Mockito.when(userMapper.fromEntityListToView(entitiesList)).thenReturn(viewList);
 
-		PagedModel<UserViewDto> returnedView = userFacade.getAll(pageableMock);
+		PagedModel<UserDetailedView> returnedView = userFacade.getAll(pageableMock);
 
 		assertThat(returnedView.getContent()).hasSize(2);
 		assertThat(returnedView.getContent()).containsAll(viewList);
@@ -154,7 +154,7 @@ class UserFacadeTest {
 		Mockito.when(userMapper.fromCreateToEntity(uuid, createDto)).thenReturn(entity);
 		Mockito.when(userService.update(entity)).thenReturn(updatedEntity);
 
-		UserViewDto view = userFacade.update(uuid, createDto);
+		UserDetailedView view = userFacade.update(uuid, createDto);
 
 		assertThat(view.uid()).isEqualTo(uuid);
 		assertThat(view.firstName()).isEqualTo(updatedEntity.getFirstName());

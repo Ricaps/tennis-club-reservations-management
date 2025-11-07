@@ -4,6 +4,7 @@ import com.github.ricaps.tennis_club.business.service.definition.UserService;
 import com.github.ricaps.tennis_club.peristence.entity.User;
 import com.github.ricaps.tennis_club.security.JwtUtils;
 import com.github.ricaps.tennis_club.security.model.JwtAuthenticationToken;
+import com.github.ricaps.tennis_club.security.model.JwtUser;
 import io.jsonwebtoken.Claims;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
@@ -12,11 +13,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -65,9 +68,9 @@ public class JwtFilter extends OncePerRequestFilter {
 			}
 
 			User user = userOptional.get();
-
-			JwtAuthenticationToken token = new JwtAuthenticationToken(user, jwtToken,
-					jwtUtils.extractAuthorities(claims));
+			Collection<SimpleGrantedAuthority> authorities = jwtUtils.extractAuthorities(claims);
+			JwtUser jwtUser = new JwtUser(user, authorities);
+			JwtAuthenticationToken token = new JwtAuthenticationToken(jwtUser, jwtToken);
 			token.setAuthenticated(true);
 
 			SecurityContextHolder.getContext().setAuthentication(token);

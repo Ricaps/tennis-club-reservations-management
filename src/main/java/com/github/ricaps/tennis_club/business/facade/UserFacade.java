@@ -1,7 +1,7 @@
 package com.github.ricaps.tennis_club.business.facade;
 
 import com.github.ricaps.tennis_club.api.user.UserCreateDto;
-import com.github.ricaps.tennis_club.api.user.UserViewDto;
+import com.github.ricaps.tennis_club.api.user.UserDetailedView;
 import com.github.ricaps.tennis_club.business.facade.definition.CrudFacade;
 import com.github.ricaps.tennis_club.business.facade.definition.GenericFacade;
 import com.github.ricaps.tennis_club.business.mapping.UserMapper;
@@ -18,11 +18,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserFacade implements CrudFacade<UserViewDto, UserCreateDto> {
+public class UserFacade implements CrudFacade<UserDetailedView, UserCreateDto> {
 
 	private final UserMapper userMapper;
 
-	private final GenericFacade<UserViewDto, UserCreateDto, User> genericFacade;
+	private final GenericFacade<UserDetailedView, UserCreateDto, User> genericFacade;
 
 	private final UserService userService;
 
@@ -36,7 +36,7 @@ public class UserFacade implements CrudFacade<UserViewDto, UserCreateDto> {
 	}
 
 	@Override
-	public UserViewDto create(UserCreateDto userCreateDto) {
+	public UserDetailedView create(UserCreateDto userCreateDto) {
 		ValidationHelper.requireNonNull(userCreateDto, "User register DTO cannot be null!");
 
 		final User entity = userMapper.fromCreateToEntity(userCreateDto);
@@ -49,17 +49,17 @@ public class UserFacade implements CrudFacade<UserViewDto, UserCreateDto> {
 	}
 
 	@Override
-	public Optional<UserViewDto> get(UUID uid) {
+	public Optional<UserDetailedView> get(UUID uid) {
 		return genericFacade.get(uid);
 	}
 
 	@Override
-	public PagedModel<UserViewDto> getAll(Pageable pageable) {
+	public PagedModel<UserDetailedView> getAll(Pageable pageable) {
 		return genericFacade.getAll(pageable);
 	}
 
 	@Override
-	public UserViewDto update(UUID uid, UserCreateDto userCreateDto) {
+	public UserDetailedView update(UUID uid, UserCreateDto userCreateDto) {
 		return genericFacade.update(uid, userCreateDto);
 	}
 
