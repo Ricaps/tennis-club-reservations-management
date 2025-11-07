@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Schema(description = "Projection of the User entity")
-public record UserViewDto(
+public record UserDetailedView(
 		@NotNull @Schema(description = "Identifier of the user",
 				example = "b3766477-ab42-44ed-accc-2fa54b375e9e") UUID uid,
 		@NotNull @Size(min = 1, max = 255) @Schema(description = "First name of the user",

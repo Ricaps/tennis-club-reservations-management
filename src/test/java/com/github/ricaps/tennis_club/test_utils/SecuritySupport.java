@@ -5,6 +5,7 @@ import com.github.ricaps.tennis_club.peristence.entity.Role;
 import com.github.ricaps.tennis_club.peristence.entity.User;
 import com.github.ricaps.tennis_club.security.JwtUtils;
 import com.github.ricaps.tennis_club.security.model.JwtAuthenticationToken;
+import com.github.ricaps.tennis_club.security.model.JwtUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
 import java.util.Set;
 
 import static com.github.ricaps.tennis_club.security.JwtUtils.ROLE_PREFIX;
@@ -52,8 +54,10 @@ public class SecuritySupport {
 		user.setRoles(roles);
 
 		String token = jwtUtils.generateAccessToken(user);
-		JwtAuthenticationToken auth = new JwtAuthenticationToken(user, token,
-				roles.stream().map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role)).toList());
+		List<SimpleGrantedAuthority> authorities = roles.stream()
+			.map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role))
+			.toList();
+		JwtAuthenticationToken auth = new JwtAuthenticationToken(new JwtUser(user, authorities), token);
 		auth.setAuthenticated(true);
 		return MockMvcBuilders.webAppContextSetup(context)
 			.defaultRequest(get("/").header(HttpHeaders.AUTHORIZATION, "Bearer " + token).with(authentication(auth)))

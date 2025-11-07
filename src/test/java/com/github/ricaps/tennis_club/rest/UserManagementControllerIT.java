@@ -2,7 +2,7 @@ package com.github.ricaps.tennis_club.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ricaps.tennis_club.api.user.UserCreateDto;
-import com.github.ricaps.tennis_club.api.user.UserViewDto;
+import com.github.ricaps.tennis_club.api.user.UserDetailedView;
 import com.github.ricaps.tennis_club.business.facade.UserFacade;
 import com.github.ricaps.tennis_club.peristence.dao.definition.UserDao;
 import com.github.ricaps.tennis_club.peristence.entity.Role;
@@ -64,7 +64,7 @@ class UserManagementControllerIT {
 			.getResponse()
 			.getContentAsString();
 
-		UserViewDto returnedView = objectMapper.readValue(response, UserViewDto.class);
+		UserDetailedView returnedView = objectMapper.readValue(response, UserDetailedView.class);
 		UserTestData.compareViewAndCreate(returnedView, createDto);
 	}
 
@@ -108,7 +108,7 @@ class UserManagementControllerIT {
 			.getResponse()
 			.getContentAsString();
 
-		UserViewDto returnedView = objectMapper.readValue(response, UserViewDto.class);
+		UserDetailedView returnedView = objectMapper.readValue(response, UserDetailedView.class);
 		UserTestData.compareViewAndEntity(returnedView, entity);
 	}
 
@@ -165,7 +165,7 @@ class UserManagementControllerIT {
 			.getResponse()
 			.getContentAsString();
 
-		UserViewDto updatedView = objectMapper.readValue(response, UserViewDto.class);
+		UserDetailedView updatedView = objectMapper.readValue(response, UserDetailedView.class);
 		UserTestData.compareViewAndCreate(updatedView, createDto);
 	}
 

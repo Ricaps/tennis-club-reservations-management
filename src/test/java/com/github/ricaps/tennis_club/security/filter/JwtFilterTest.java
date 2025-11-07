@@ -7,6 +7,7 @@ import com.github.ricaps.tennis_club.peristence.dao.definition.UserDao;
 import com.github.ricaps.tennis_club.peristence.entity.User;
 import com.github.ricaps.tennis_club.security.JwtUtils;
 import com.github.ricaps.tennis_club.security.model.JwtAuthenticationToken;
+import com.github.ricaps.tennis_club.security.model.JwtUser;
 import com.github.ricaps.tennis_club.test_utils.SecuritySupport;
 import com.github.ricaps.tennis_club.test_utils.SurfaceTestData;
 import io.jsonwebtoken.Claims;
@@ -115,7 +116,7 @@ class JwtFilterTest {
 			SecuritySupport.TestSecurityContext testSecurityContext) {
 		User user = userDao.findById(UUID.fromString(claims.getSubject())).orElseThrow();
 		Collection<SimpleGrantedAuthority> authorities = jwtUtils.extractAuthorities(claims);
-		return new JwtAuthenticationToken(user, testSecurityContext.token(), authorities);
+		return new JwtAuthenticationToken(new JwtUser(user, authorities), testSecurityContext.token());
 	}
 
 	@Test

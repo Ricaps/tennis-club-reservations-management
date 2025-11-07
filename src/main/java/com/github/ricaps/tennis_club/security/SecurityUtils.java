@@ -1,6 +1,6 @@
 package com.github.ricaps.tennis_club.security;
 
-import com.github.ricaps.tennis_club.peristence.entity.User;
+import com.github.ricaps.tennis_club.security.model.JwtUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -22,8 +22,8 @@ public class SecurityUtils {
 
 		Object principal = authentication.getPrincipal();
 
-		if (principal instanceof User user) {
-			return Optional.of(user.getUid());
+		if (principal instanceof JwtUser user) {
+			return Optional.of(user.getUser().getUid());
 		}
 
 		return Optional.empty();
