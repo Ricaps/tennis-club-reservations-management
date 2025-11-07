@@ -1,21 +1,24 @@
 package com.github.ricaps.tennis_club.peristence.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table
+@SuperBuilder
 @Getter
 @Setter
 @ToString
@@ -31,15 +34,19 @@ public class Reservation extends IdentifiedEntity {
 	private User user;
 
 	@Column(nullable = false)
-	private LocalDateTime from;
+	private OffsetDateTime fromTime;
 
 	@Column(nullable = false)
-	private LocalDateTime to;
+	private OffsetDateTime toTime;
 
 	@Column(nullable = false)
-	private Boolean is_quad_game;
+	@Builder.Default
+	private OffsetDateTime createdAt = OffsetDateTime.now();
 
-	@Column(precision = 10, scale = 2)
-	private BigDecimal total_price;
+	@Column(nullable = false)
+	private Boolean isQuadGame;
+
+	@Embedded
+	private MoneyAmount totalPrice;
 
 }
