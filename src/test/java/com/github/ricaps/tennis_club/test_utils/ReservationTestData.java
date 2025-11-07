@@ -6,7 +6,9 @@ import com.github.ricaps.tennis_club.peristence.entity.Reservation;
 import com.github.ricaps.tennis_club.peristence.entity.User;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Currency;
 import java.util.UUID;
 
@@ -17,10 +19,11 @@ public class ReservationTestData {
 	}
 
 	public static Reservation entity(Court court, User user) {
+		OffsetDateTime startTime = Instant.parse("2025-01-01T14:00:00Z").atOffset(ZoneOffset.UTC);
 		return Reservation.builder()
 			.uid(UUID.randomUUID())
-			.fromTime(LocalDateTime.now())
-			.toTime(LocalDateTime.now())
+			.fromTime(startTime)
+			.toTime(startTime.plusHours(2))
 			.isQuadGame(true)
 			.totalPrice(new MoneyAmount(new BigDecimal("15.30"), Currency.getInstance("CZK")))
 			.court(court)
