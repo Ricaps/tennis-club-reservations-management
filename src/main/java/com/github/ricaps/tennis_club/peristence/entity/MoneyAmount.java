@@ -1,5 +1,6 @@
 package com.github.ricaps.tennis_club.peristence.entity;
 
+import com.github.ricaps.tennis_club.business.utils.MoneyUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.Objects;
 @NoArgsConstructor
 public class MoneyAmount {
 
-	@Column(nullable = false, precision = 10, scale = 2)
+	@Column(nullable = false, precision = MoneyUtils.PRECISION, scale = MoneyUtils.SCALE)
 	private BigDecimal amount;
 
 	@Column(nullable = false, length = 3)

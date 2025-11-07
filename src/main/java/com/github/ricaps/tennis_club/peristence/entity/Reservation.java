@@ -11,7 +11,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.time.OffsetDateTime;
@@ -21,7 +20,6 @@ import java.time.OffsetDateTime;
 @SuperBuilder
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 public class Reservation extends IdentifiedEntity {
 
