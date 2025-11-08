@@ -23,7 +23,7 @@ public class SecurityUtils {
 		Object principal = authentication.getPrincipal();
 
 		if (principal instanceof JwtUser user) {
-			return Optional.of(user.getUser().getUid());
+			return Optional.of(user.user().getUid());
 		}
 
 		return Optional.empty();

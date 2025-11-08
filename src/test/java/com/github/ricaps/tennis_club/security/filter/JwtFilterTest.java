@@ -78,6 +78,7 @@ class JwtFilterTest {
 		JwtAuthenticationToken token = getJwtAuthenticationToken(claims, testSecurityContext);
 		token.setAuthenticated(true);
 
+
 		Mockito.verify(userService, Mockito.times(1)).get(UUID.fromString(claims.getSubject()));
 		Mockito.verify(contextSpy, Mockito.times(1)).setAuthentication(token);
 		assertThat(contextSpy.getAuthentication()).isInstanceOf(JwtAuthenticationToken.class);
