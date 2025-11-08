@@ -1,6 +1,7 @@
 package com.github.ricaps.tennis_club.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.ricaps.tennis_club.api.shared.ErrorDto;
 import com.github.ricaps.tennis_club.api.surface.SurfaceCreateDto;
 import com.github.ricaps.tennis_club.api.surface.SurfaceViewDto;
 import com.github.ricaps.tennis_club.business.facade.SurfaceFacade;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.github.ricaps.tennis_club.test_utils.AssertionUtils.assertError;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -80,7 +83,9 @@ class SurfaceControllerIT {
 			.getResponse()
 			.getContentAsString();
 
-		assertThat(response).isEmpty();
+		ErrorDto error = objectMapper.readValue(response, ErrorDto.class);
+		assertError(error, "Invalid request content.", HttpStatus.BAD_REQUEST,
+				List.of(new ErrorDto.FieldError("name", "size must be between 1 and 255")));
 	}
 
 	@Test
@@ -148,7 +153,8 @@ class SurfaceControllerIT {
 			.getContentAsString();
 
 		Mockito.verify(surfaceFacade, Mockito.times(1)).update(uuid, createDto);
-		assertThat(response).isEmpty();
+		ErrorDto error = objectMapper.readValue(response, ErrorDto.class);
+		assertError(error, "Surface with UID %s doesn't exist!".formatted(uuid), HttpStatus.NOT_FOUND, List.of());
 	}
 
 	@Test
@@ -179,7 +185,9 @@ class SurfaceControllerIT {
 			.getContentAsString();
 
 		Mockito.verify(surfaceFacade, Mockito.times(1)).delete(uuid);
-		assertThat(response).isEmpty();
+
+		ErrorDto error = objectMapper.readValue(response, ErrorDto.class);
+		assertError(error, "Surface with UID %s doesn't exist!".formatted(uuid), HttpStatus.NOT_FOUND, List.of());
 	}
 
 	@Test
