@@ -46,6 +46,9 @@ public class OpenApiConfig {
 					new ApiResponse().description("You don't have required permissions to access this resource!")
 						.content(errorContent));
 
+			addGlobalResponse(openApi, "400",
+					new ApiResponse().description("Validation of request failed!").content(errorContent));
+
 		};
 
 	}
