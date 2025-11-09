@@ -13,6 +13,7 @@ import com.github.ricaps.tennis_club.test_utils.MockUtils;
 import com.github.ricaps.tennis_club.test_utils.ReservationTestData;
 import com.github.ricaps.tennis_club.test_utils.UserTestData;
 import jakarta.validation.ValidationException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,11 +24,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
+import java.time.Clock;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
 import static com.github.ricaps.tennis_club.business.service.ReservationServiceImpl.QUAD_GAME_MULTIPLIER;
+import static com.github.ricaps.tennis_club.test_utils.TimeConfig.getFixedClock;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -40,10 +43,18 @@ class ReservationServiceImplTest {
 	@InjectMocks
 	private ReservationServiceImpl reservationService;
 
+	private ReservationTestData reservationTestData;
+
+	@BeforeEach
+	void setup() {
+		Clock clock = getFixedClock();
+		reservationTestData = new ReservationTestData(clock);
+	}
+
 	private Reservation createEntity() {
 		Court court = CourtTestData.entity();
 		User user = UserTestData.entity(true);
-		return ReservationTestData.entity(court, user);
+		return reservationTestData.entity(court, user);
 	}
 
 	@Test

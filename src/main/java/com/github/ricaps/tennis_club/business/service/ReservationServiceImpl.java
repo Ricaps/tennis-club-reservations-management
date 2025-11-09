@@ -2,6 +2,7 @@ package com.github.ricaps.tennis_club.business.service;
 
 import com.github.ricaps.tennis_club.business.service.definition.GenericService;
 import com.github.ricaps.tennis_club.business.service.definition.ReservationService;
+import com.github.ricaps.tennis_club.business.utils.MoneyUtils;
 import com.github.ricaps.tennis_club.exception.EntityExistsException;
 import com.github.ricaps.tennis_club.exception.EntityNotExistsException;
 import com.github.ricaps.tennis_club.peristence.dao.definition.ReservationDao;
@@ -41,7 +42,7 @@ public class ReservationServiceImpl implements ReservationService {
 		final long reservationDuration = Duration.between(reservation.getFromTime(), reservation.getToTime())
 			.toMinutes();
 		final double multiplier = reservation.getIsQuadGame() ? QUAD_GAME_MULTIPLIER : 1;
-		return minutePrice.multiply(new BigDecimal(reservationDuration * multiplier));
+		return MoneyUtils.multiply(minutePrice, new BigDecimal(reservationDuration * multiplier));
 
 	}
 
