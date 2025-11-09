@@ -10,8 +10,8 @@
   priced ×1.5).
 - ☎️ Automatically manage **customers** by phone number — new users are created when a number doesn’t yet exist.
 - 🔐 Secure the system with **JWT-based authentication**, including:
-  - Registration at [`/api/v1/auth/register`](http://localhost:8080/api/auth/register)
-  - Login at [`/api/v1/auth/login`](http://localhost:8080/api/auth/login)
+  - Registration at [`/api/v1/auth/register`](http://localhost:8080/api/v1/auth/register)
+  - Login at [`/api/v1/auth/login`](http://localhost:8080/api/v1/auth/login)
 - 📘 Explore and test all REST endpoints through an interactive **Swagger UI** available at  
   [`http://localhost:8080/api/swagger-ui/index.html`](http://localhost:8080/api/swagger-ui/index.html).
 - 🗑️ Implement **soft delete** for all entities, with optional **data initialization** (2 surfaces and 4 courts) enabled
@@ -54,6 +54,21 @@ When running the application with the `prod` profile, configuration properties c
 
 This external configuration file allows you to override sensitive or environment-specific settings.
 
+### 👑 Database Seed
+
+When **data initialization** is enabled (`application.database-seed=true`), the system automatically creates:
+
+- 🏓 **2 surface types**
+- 🏟️ **4 tennis courts**
+- 👤 **1 default admin user**
+
+**Default Admin Credentials:**
+
+- 📱 **Phone:** `+420111111112`
+- 🔑 **Password:** `12345`
+
+This user can be used to log in via the authentication endpoint:  
+[`POST /api/v1/auth/login`](http://localhost:8080/api/v1/auth/login)
 ---
 
 ## 🗂️ Diagrams
