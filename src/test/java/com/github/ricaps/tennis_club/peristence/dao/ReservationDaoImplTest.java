@@ -12,6 +12,7 @@ import com.github.ricaps.tennis_club.peristence.utils.PageableResult;
 import com.github.ricaps.tennis_club.test_utils.CourtTestData;
 import com.github.ricaps.tennis_club.test_utils.ReservationTestData;
 import com.github.ricaps.tennis_club.test_utils.SurfaceTestData;
+import com.github.ricaps.tennis_club.test_utils.TimeConfig;
 import com.github.ricaps.tennis_club.test_utils.UserTestData;
 import com.github.ricaps.tennis_club.utils.UUIDUtils;
 import jakarta.persistence.EntityManager;
@@ -34,10 +35,11 @@ import java.util.Currency;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.github.ricaps.tennis_club.test_utils.TimeConfig.getFixedClock;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@Import(ReservationDaoImpl.class)
+@Import({ ReservationDaoImpl.class, ReservationTestData.class, TimeConfig.class })
 class ReservationDaoImplTest extends AbstractDaoTest<Reservation> {
 
 	@Autowired
@@ -45,6 +47,9 @@ class ReservationDaoImplTest extends AbstractDaoTest<Reservation> {
 
 	@Autowired
 	ReservationDao reservationDao;
+
+	@Autowired
+	ReservationTestData reservationTestData;
 
 	private Court court;
 
@@ -58,7 +63,7 @@ class ReservationDaoImplTest extends AbstractDaoTest<Reservation> {
 	}
 
 	private static Stream<Arguments> provideIntervalTestArguments() {
-		Reservation reservation = ReservationTestData.entity(null, null);
+		Reservation reservation = new ReservationTestData(getFixedClock()).entity(null, null);
 
 		return Stream.of(
 				Arguments.of(reservation, reservation.getFromTime().minusHours(1),
@@ -96,7 +101,7 @@ class ReservationDaoImplTest extends AbstractDaoTest<Reservation> {
 
 	@Override
 	protected Reservation createEntity() {
-		return ReservationTestData.entity(court, user);
+		return reservationTestData.entity(court, user);
 	}
 
 	@Override
@@ -190,7 +195,7 @@ class ReservationDaoImplTest extends AbstractDaoTest<Reservation> {
 	private List<Reservation> createReservations(Court court) {
 		List<Reservation> reservations = new ArrayList<>();
 		for (int i = 0; i < 10; i++) {
-			Reservation reservation = ReservationTestData.entity(court, user);
+			Reservation reservation = reservationTestData.entity(court, user);
 			reservations.add(reservation);
 		}
 		reservationDao.saveAll(reservations);
@@ -251,7 +256,7 @@ class ReservationDaoImplTest extends AbstractDaoTest<Reservation> {
 	private List<Reservation> createReservations(User user, OffsetDateTime referenceTime) {
 		List<Reservation> reservations = new ArrayList<>();
 		for (int i = 0; i < 10; i++) {
-			Reservation reservation = ReservationTestData.entity(court, user, referenceTime);
+			Reservation reservation = reservationTestData.entity(court, user, referenceTime);
 			reservations.add(reservation);
 		}
 		reservationDao.saveAll(reservations);

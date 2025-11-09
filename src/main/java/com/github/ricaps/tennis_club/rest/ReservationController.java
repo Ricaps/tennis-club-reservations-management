@@ -6,10 +6,12 @@ import com.github.ricaps.tennis_club.api.reservation.ReservationViewDto;
 import com.github.ricaps.tennis_club.business.facade.definition.ReservationFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +28,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -126,8 +130,13 @@ public class ReservationController {
 			@ApiResponse(responseCode = "400", description = "Validation of input request failed"), })
 	@GetMapping("/user/{phoneNumber}")
 	@PageableAsQueryParam
-	public ResponseEntity<PagedModel<ReservationViewDto>> getByPhoneNumber(ReservationPhoneDateQueryDto queryDto) {
-		PagedModel<ReservationViewDto> reservationView = reservationFacade.getAllByPhoneNumber(queryDto);
+	public ResponseEntity<PagedModel<ReservationViewDto>> getByPhoneNumber(
+			@PathVariable @NotNull @Schema(description = "Phone number bound to reservation's user") String phoneNumber,
+			@RequestParam @NotNull @Schema(
+					description = "Ability to filter reservations by date and time. Shows reservations with datetime greater than defined.") OffsetDateTime fromTime,
+			@ParameterObject @PageableDefault(sort = "createdAt") Pageable pageable) {
+		PagedModel<ReservationViewDto> reservationView = reservationFacade
+			.getAllByPhoneNumber(new ReservationPhoneDateQueryDto(phoneNumber, fromTime, pageable));
 
 		return ResponseEntity.ok(reservationView);
 	}

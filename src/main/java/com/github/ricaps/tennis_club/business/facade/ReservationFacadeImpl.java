@@ -50,7 +50,9 @@ public class ReservationFacadeImpl implements ReservationFacade {
 
 	@Override
 	public ReservationViewDto create(ReservationCreateDto reservationCreateDto) {
-		final Reservation created = reservationService.create(getSavableEntity(reservationCreateDto));
+		Reservation savableEntity = getSavableEntity(reservationCreateDto);
+		savableEntity.setUid(UUIDUtils.generate());
+		final Reservation created = reservationService.create(savableEntity);
 
 		return reservationMapper.fromEntityToView(created);
 	}
@@ -63,11 +65,7 @@ public class ReservationFacadeImpl implements ReservationFacade {
 			.orElseThrow(() -> new NotAuthenticatedException("User must be authenticated!"));
 		final User userReference = userService.getReference(userUUID);
 
-		final Reservation entity = reservationMapper.fromCreateToEntity(courtReference, userReference,
-				reservationCreateDto);
-		entity.setUid(UUIDUtils.generate());
-
-		return entity;
+		return reservationMapper.fromCreateToEntity(courtReference, userReference, reservationCreateDto);
 	}
 
 	@Override
@@ -82,7 +80,11 @@ public class ReservationFacadeImpl implements ReservationFacade {
 
 	@Override
 	public ReservationViewDto update(UUID uid, ReservationCreateDto reservationCreateDto) {
-		final Reservation updated = reservationService.update(getSavableEntity(reservationCreateDto));
+		ValidationHelper.requireNonNull(uid, "UID of updated entity cannot be null!");
+
+		Reservation savableEntity = getSavableEntity(reservationCreateDto);
+		savableEntity.setUid(uid);
+		final Reservation updated = reservationService.update(savableEntity);
 
 		return reservationMapper.fromEntityToView(updated);
 	}
@@ -94,6 +96,9 @@ public class ReservationFacadeImpl implements ReservationFacade {
 
 	@Override
 	public PagedModel<ReservationViewDto> getAllByCourt(UUID courtUID, Pageable pageable) {
+		ValidationHelper.requireNonNull(courtUID, "UID cannot be null!");
+		ValidationHelper.requireNonNull(pageable, "Pageable cannot be null!");
+
 		PageableResult<Reservation> reservations = reservationService.getAllByCourt(courtUID, pageable);
 		List<ReservationViewDto> views = reservationMapper.fromEntityListToView(reservations.data());
 
@@ -102,6 +107,10 @@ public class ReservationFacadeImpl implements ReservationFacade {
 
 	@Override
 	public PagedModel<ReservationViewDto> getAllByPhoneNumber(ReservationPhoneDateQueryDto queryDto) {
+		ValidationHelper.requireNonNull(queryDto, "Reservation query cannot be null!");
+		ValidationHelper.requireNonNull(queryDto.phoneNumber(), "Phone number cannot be null!");
+		ValidationHelper.requireNonNull(queryDto.pageable(), "Pageable cannot be null!");
+
 		PageableResult<Reservation> reservations = reservationService.getAllByPhoneNumber(queryDto.phoneNumber(),
 				queryDto.fromTime(), queryDto.pageable());
 		List<ReservationViewDto> views = reservationMapper.fromEntityListToView(reservations.data());

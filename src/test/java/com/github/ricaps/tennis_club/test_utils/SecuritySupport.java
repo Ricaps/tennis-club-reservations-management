@@ -46,7 +46,7 @@ public class SecuritySupport {
 			.apply(SecurityMockMvcConfigurers.springSecurity())
 			.build();
 
-		return new TestSecurityContext(mvc, token);
+		return new TestSecurityContext(mvc, token, user);
 	}
 
 	public MockMvc createFakeAuthMvc(Set<Role> roles) {
@@ -65,7 +65,7 @@ public class SecuritySupport {
 			.build();
 	}
 
-	public static record TestSecurityContext(MockMvc mockMvc, String token) {
+	public record TestSecurityContext(MockMvc mockMvc, String token, User user) {
 	}
 
 }

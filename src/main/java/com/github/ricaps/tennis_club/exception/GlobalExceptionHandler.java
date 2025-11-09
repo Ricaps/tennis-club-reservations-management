@@ -1,6 +1,7 @@
 package com.github.ricaps.tennis_club.exception;
 
 import com.github.ricaps.tennis_club.api.shared.ErrorDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -21,12 +23,15 @@ public class GlobalExceptionHandler {
 			.toList();
 
 		final ErrorDto error = new ErrorDto(ex.getBody().getDetail(), ex.getStatusCode().value(), fieldErrors);
+		log.error("An validation error occurred while running request", ex);
 		return ResponseEntity.status(ex.getStatusCode()).body(error);
 	}
 
 	@ExceptionHandler(ResponseStatusException.class)
 	public ResponseEntity<ErrorDto> handleResponseStatusException(ResponseStatusException ex) {
 		final ErrorDto error = new ErrorDto(ex.getBody().getDetail(), ex.getStatusCode().value(), List.of());
+
+		log.error("An application error occurred while running request", ex);
 		return ResponseEntity.status(ex.getStatusCode()).body(error);
 	}
 
@@ -34,6 +39,8 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorDto> handleOtherExceptions(Exception ex) {
 		final ErrorDto error = new ErrorDto(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), List.of());
+
+		log.error("An error occurred while running request", ex);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
 	}
 }
