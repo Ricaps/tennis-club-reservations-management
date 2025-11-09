@@ -10,6 +10,7 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -46,6 +47,7 @@ public class User extends IdentifiedEntity {
 			joinColumns = @JoinColumn(name = "user_uid", foreignKey = @ForeignKey(name = "fk_user_roles_on_user")))
 	@Column(name = "role", nullable = false)
 	@Enumerated(EnumType.STRING)
+	@Builder.Default
 	private Set<Role> roles = new HashSet<>();
 
 }

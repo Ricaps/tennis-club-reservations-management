@@ -12,6 +12,8 @@ import org.mapstruct.Mapping;
 public interface ReservationMapper extends CrudMapper<ReservationViewDto, ReservationCreateDto, Reservation> {
 
 	@Mapping(target = "uid", ignore = true)
+	@Mapping(target = "createdAt", ignore = true)
+	@Mapping(target = "totalPrice", ignore = true)
 	Reservation fromCreateToEntity(Court court, User user, ReservationCreateDto reservationCreateDto);
 
 }
