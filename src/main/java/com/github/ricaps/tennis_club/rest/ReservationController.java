@@ -1,8 +1,9 @@
 package com.github.ricaps.tennis_club.rest;
 
 import com.github.ricaps.tennis_club.api.reservation.ReservationCreateDto;
+import com.github.ricaps.tennis_club.api.reservation.ReservationPhoneDateQueryDto;
 import com.github.ricaps.tennis_club.api.reservation.ReservationViewDto;
-import com.github.ricaps.tennis_club.business.facade.ReservationFacade;
+import com.github.ricaps.tennis_club.business.facade.definition.ReservationFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -102,6 +103,33 @@ public class ReservationController {
 		reservationFacade.delete(uid);
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	@Operation(description = "Get all reservations paged filtered by specific court UID")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Reservation found and returned successfully",
+					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+			@ApiResponse(responseCode = "400", description = "Validation of input request failed"), })
+	@GetMapping("/court/{courtUID}")
+	@PageableAsQueryParam
+	public ResponseEntity<PagedModel<ReservationViewDto>> getByCourt(@PathVariable UUID courtUID,
+			@ParameterObject @PageableDefault(sort = { "createdAt" }) Pageable pageable) {
+		PagedModel<ReservationViewDto> reservationView = reservationFacade.getAllByCourt(courtUID, pageable);
+
+		return ResponseEntity.ok(reservationView);
+	}
+
+	@Operation(description = "Get all reservations paged filtered by user (phoneNumber) and time")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Reservation found and returned successfully",
+					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+			@ApiResponse(responseCode = "400", description = "Validation of input request failed"), })
+	@GetMapping("/user/{phoneNumber}")
+	@PageableAsQueryParam
+	public ResponseEntity<PagedModel<ReservationViewDto>> getByPhoneNumber(ReservationPhoneDateQueryDto queryDto) {
+		PagedModel<ReservationViewDto> reservationView = reservationFacade.getAllByPhoneNumber(queryDto);
+
+		return ResponseEntity.ok(reservationView);
 	}
 
 }
