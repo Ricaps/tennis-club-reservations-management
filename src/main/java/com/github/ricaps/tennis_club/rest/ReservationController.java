@@ -108,8 +108,10 @@ public class ReservationController {
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@GetMapping("/court/{courtUID}")
 	@PageableAsQueryParam
-	public ResponseEntity<PagedModel<ReservationViewDto>> getByCourt(@PathVariable UUID courtUID,
-			@ParameterObject @PageableDefault(sort = { "createdAt" }) Pageable pageable) {
+	public ResponseEntity<PagedModel<ReservationViewDto>> getByCourt(
+			@Schema(example = "UID of the court") @PathVariable UUID courtUID,
+			@Schema(example = "Pageable object. Default paging is createdAt|asc") @ParameterObject @PageableDefault(
+					sort = { "createdAt" }) Pageable pageable) {
 		PagedModel<ReservationViewDto> reservationView = reservationFacade.getAllByCourt(courtUID, pageable);
 
 		return ResponseEntity.ok(reservationView);
@@ -124,7 +126,8 @@ public class ReservationController {
 	public ResponseEntity<PagedModel<ReservationViewDto>> getByPhoneNumber(
 			@PathVariable @NotNull @Schema(description = "Phone number bound to reservation's user") String phoneNumber,
 			@RequestParam @NotNull @Schema(
-					description = "Ability to filter reservations by date and time. Shows reservations with datetime greater than defined.") OffsetDateTime fromTime,
+					description = "Ability to filter reservations by date and time. Shows reservations with datetime greater than defined.",
+					example = "2025-11-07T14:30:00+01:00") OffsetDateTime fromTime,
 			@ParameterObject @PageableDefault(sort = "createdAt") Pageable pageable) {
 		PagedModel<ReservationViewDto> reservationView = reservationFacade
 			.getAllByPhoneNumber(new ReservationPhoneDateQueryDto(phoneNumber, fromTime, pageable));

@@ -28,6 +28,8 @@ public class ReservationServiceImpl implements ReservationService {
 
 	public static final double QUAD_GAME_MULTIPLIER = 1.5;
 
+	public static final int RESERVATION_MAX_HOURS = 3;
+
 	private final ReservationDao reservationDao;
 
 	private final GenericService<Reservation> genericService;
@@ -47,8 +49,15 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 
 	private static void validateTimeRange(Reservation entity) {
-		if (!entity.getFromTime().isBefore(entity.getToTime())) {
+		OffsetDateTime fromTime = entity.getFromTime();
+		OffsetDateTime toTime = entity.getToTime();
+
+		if (!fromTime.isBefore(toTime)) {
 			throw new ValidationException("From time must be before to time!");
+		}
+
+		if (Duration.between(fromTime, toTime).toMinutes() > RESERVATION_MAX_HOURS * 60) {
+			throw new ValidationException("Reservation can be created for maximum 3 hours!");
 		}
 	}
 

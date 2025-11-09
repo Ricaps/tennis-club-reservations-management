@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.github.ricaps.tennis_club.business.service.ReservationServiceImpl.QUAD_GAME_MULTIPLIER;
+import static com.github.ricaps.tennis_club.business.service.ReservationServiceImpl.RESERVATION_MAX_HOURS;
 import static com.github.ricaps.tennis_club.test_utils.TimeConfig.getFixedClock;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -110,6 +111,16 @@ class ReservationServiceImplTest {
 
 		assertThatThrownBy(() -> reservationService.create(reservation)).isInstanceOf(ValidationException.class)
 			.hasMessage("From time must be before to time!");
+		Mockito.verify(reservationDao, Mockito.never()).save(Mockito.any());
+	}
+
+	@Test
+	void create_maxLengthOfReservation_throwsException() {
+		Reservation reservation = createEntity();
+		reservation.setToTime(reservation.getFromTime().plusHours(RESERVATION_MAX_HOURS).plusMinutes(1));
+
+		assertThatThrownBy(() -> reservationService.create(reservation)).isInstanceOf(ValidationException.class)
+			.hasMessage("Reservation can be created for maximum 3 hours!");
 		Mockito.verify(reservationDao, Mockito.never()).save(Mockito.any());
 	}
 
