@@ -81,11 +81,6 @@ class ReservationControllerIT {
 				Arguments.of("createdAt,ASC", "$.content[0]", "$.content[1]"));
 	}
 
-	private static Stream<Arguments> getByPhoneMethodData() {
-		return Stream.of(Arguments.of("createdAt,DESC", "$.content[1]", "$.content[0]"),
-				Arguments.of("createdAt,ASC", "$.content[0]", "$.content[1]"));
-	}
-
 	@BeforeEach
 	void setup() {
 		testSecurityContext = securitySupport.defineUserAndGetMvc(true);

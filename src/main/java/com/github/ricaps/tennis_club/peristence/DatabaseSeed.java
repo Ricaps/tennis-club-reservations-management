@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Component
-@ConditionalOnProperty(value = "database.seed", havingValue = "true")
+@ConditionalOnProperty(value = "application.database-seed", havingValue = "true")
 @Slf4j
 public class DatabaseSeed implements InitializingBean {
 

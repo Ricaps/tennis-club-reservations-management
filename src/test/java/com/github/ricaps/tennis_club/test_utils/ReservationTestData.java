@@ -1,15 +1,11 @@
 package com.github.ricaps.tennis_club.test_utils;
 
-import com.github.ricaps.tennis_club.api.court.CourtViewDto;
 import com.github.ricaps.tennis_club.api.reservation.ReservationCreateDto;
 import com.github.ricaps.tennis_club.api.reservation.ReservationViewDto;
-import com.github.ricaps.tennis_club.api.shared.MoneyAmountDto;
-import com.github.ricaps.tennis_club.api.user.UserBasicView;
 import com.github.ricaps.tennis_club.peristence.entity.Court;
 import com.github.ricaps.tennis_club.peristence.entity.MoneyAmount;
 import com.github.ricaps.tennis_club.peristence.entity.Reservation;
 import com.github.ricaps.tennis_club.peristence.entity.User;
-import com.github.ricaps.tennis_club.utils.UUIDUtils;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -62,15 +58,6 @@ public class ReservationTestData {
 
 		// move start day to the past (test date & time defined in TimeConfig#clock bean)
 		return new ReservationCreateDto(surfaceUID, startTime.minusMonths(1), startTime.plusHours(1), false);
-	}
-
-	public ReservationViewDto viewReservation(UUID uuid) {
-		CourtViewDto court = CourtTestData.viewCourt(UUIDUtils.generate());
-		UserBasicView userBasicView = UserTestData.viewBasicUser(UUIDUtils.generate());
-		OffsetDateTime startTime = getCurrentTime();
-		MoneyAmountDto totalPrice = new MoneyAmountDto(new BigDecimal("10.50"), Currency.getInstance("CZK"));
-		return new ReservationViewDto(uuid, court, userBasicView, startTime, startTime.plusHours(1),
-				startTime.minusDays(1), false, totalPrice);
 	}
 
 	public void compareViewAndCreate(ReservationViewDto reservationViewDto, ReservationCreateDto createDto,
