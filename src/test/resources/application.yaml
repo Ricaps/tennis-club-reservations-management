@@ -20,8 +20,8 @@ server:
   servlet:
     context-path: "/api"
 
-database:
-  seed: false
+application:
+  database-seed: false
 
 jwt:
   secret: mySuperLongSecretKeyValueThatHasAtLeastThirtyTwoCharacters
