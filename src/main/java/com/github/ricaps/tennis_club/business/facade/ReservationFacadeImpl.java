@@ -1,9 +1,10 @@
 package com.github.ricaps.tennis_club.business.facade;
 
 import com.github.ricaps.tennis_club.api.reservation.ReservationCreateDto;
+import com.github.ricaps.tennis_club.api.reservation.ReservationPhoneDateQueryDto;
 import com.github.ricaps.tennis_club.api.reservation.ReservationViewDto;
-import com.github.ricaps.tennis_club.business.facade.definition.CrudFacade;
 import com.github.ricaps.tennis_club.business.facade.definition.GenericFacade;
+import com.github.ricaps.tennis_club.business.facade.definition.ReservationFacade;
 import com.github.ricaps.tennis_club.business.mapping.ReservationMapper;
 import com.github.ricaps.tennis_club.business.service.definition.CourtService;
 import com.github.ricaps.tennis_club.business.service.definition.ReservationService;
@@ -12,18 +13,21 @@ import com.github.ricaps.tennis_club.exception.NotAuthenticatedException;
 import com.github.ricaps.tennis_club.peristence.entity.Court;
 import com.github.ricaps.tennis_club.peristence.entity.Reservation;
 import com.github.ricaps.tennis_club.peristence.entity.User;
+import com.github.ricaps.tennis_club.peristence.utils.PageableResult;
 import com.github.ricaps.tennis_club.security.SecurityUtils;
 import com.github.ricaps.tennis_club.utils.UUIDUtils;
 import com.github.ricaps.tennis_club.utils.ValidationHelper;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class ReservationFacade implements CrudFacade<ReservationViewDto, ReservationCreateDto> {
+public class ReservationFacadeImpl implements ReservationFacade {
 
 	private final ReservationService reservationService;
 
@@ -35,7 +39,7 @@ public class ReservationFacade implements CrudFacade<ReservationViewDto, Reserva
 
 	private final GenericFacade<ReservationViewDto, ReservationCreateDto, Reservation> genericFacade;
 
-	public ReservationFacade(ReservationService reservationService, ReservationMapper reservationMapper,
+	public ReservationFacadeImpl(ReservationService reservationService, ReservationMapper reservationMapper,
 			CourtService courtService, UserService userService) {
 		this.reservationService = reservationService;
 		this.reservationMapper = reservationMapper;
@@ -86,6 +90,23 @@ public class ReservationFacade implements CrudFacade<ReservationViewDto, Reserva
 	@Override
 	public void delete(UUID uid) {
 		genericFacade.delete(uid);
+	}
+
+	@Override
+	public PagedModel<ReservationViewDto> getAllByCourt(UUID courtUID, Pageable pageable) {
+		PageableResult<Reservation> reservations = reservationService.getAllByCourt(courtUID, pageable);
+		List<ReservationViewDto> views = reservationMapper.fromEntityListToView(reservations.data());
+
+		return new PagedModel<>(new PageImpl<>(views, pageable, reservations.totalCount()));
+	}
+
+	@Override
+	public PagedModel<ReservationViewDto> getAllByPhoneNumber(ReservationPhoneDateQueryDto queryDto) {
+		PageableResult<Reservation> reservations = reservationService.getAllByPhoneNumber(queryDto.phoneNumber(),
+				queryDto.fromTime(), queryDto.pageable());
+		List<ReservationViewDto> views = reservationMapper.fromEntityListToView(reservations.data());
+
+		return new PagedModel<>(new PageImpl<>(views, queryDto.pageable(), reservations.totalCount()));
 	}
 
 }

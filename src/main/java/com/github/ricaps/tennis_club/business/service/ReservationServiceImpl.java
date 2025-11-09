@@ -8,6 +8,7 @@ import com.github.ricaps.tennis_club.peristence.dao.definition.ReservationDao;
 import com.github.ricaps.tennis_club.peristence.entity.Court;
 import com.github.ricaps.tennis_club.peristence.entity.MoneyAmount;
 import com.github.ricaps.tennis_club.peristence.entity.Reservation;
+import com.github.ricaps.tennis_club.peristence.utils.PageableResult;
 import com.github.ricaps.tennis_club.utils.ValidationHelper;
 import jakarta.validation.ValidationException;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
@@ -117,4 +119,16 @@ public class ReservationServiceImpl implements ReservationService {
 		return genericService.count();
 	}
 
+	@Override
+	public PageableResult<Reservation> getAllByCourt(UUID courtUID, Pageable pageable) {
+		return reservationDao.getReservationsAtCourt(courtUID, pageable.getPageNumber(), pageable.getPageSize(),
+				pageable.getSort());
+	}
+
+	@Override
+	public PageableResult<Reservation> getAllByPhoneNumber(String phoneNumber, OffsetDateTime fromTime,
+			Pageable pageable) {
+		return reservationDao.getReservationsByPhoneNumber(phoneNumber, fromTime, pageable.getPageNumber(),
+				pageable.getPageSize(), pageable.getSort());
+	}
 }

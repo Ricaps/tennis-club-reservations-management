@@ -2,6 +2,8 @@ package com.github.ricaps.tennis_club.peristence.dao;
 
 import com.github.ricaps.tennis_club.peristence.dao.definition.CrudDao;
 import com.github.ricaps.tennis_club.peristence.entity.IdentifiedEntity;
+import com.github.ricaps.tennis_club.peristence.utils.PredicateProvider;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -131,14 +133,21 @@ public abstract class AbstractDao<EntityType extends IdentifiedEntity> implement
 		CriteriaQuery<EntityType> criteriaQuery = criteriaBuilder.createQuery(getEntityClass());
 		Root<EntityType> root = criteriaQuery.from(getEntityClass());
 
+		TypedQuery<EntityType> typedQuery = applyPagingToQuery(pageNumber, pageSize, sort, criteriaBuilder, root,
+				criteriaQuery);
+
+		return typedQuery.getResultList();
+	}
+
+	protected TypedQuery<EntityType> applyPagingToQuery(int pageNumber, int pageSize, Sort sort,
+			CriteriaBuilder criteriaBuilder, Root<EntityType> root, CriteriaQuery<EntityType> criteriaQuery) {
 		List<Order> orders = getOrderList(sort, criteriaBuilder, root);
 
 		criteriaQuery.orderBy(orders);
 		TypedQuery<EntityType> typedQuery = entityManager.createQuery(criteriaQuery);
 		typedQuery.setMaxResults(pageSize);
 		typedQuery.setFirstResult(pageNumber * pageSize);
-
-		return typedQuery.getResultList();
+		return typedQuery;
 	}
 
 	private boolean hasProperty(Root<EntityType> root, String property) {
@@ -175,11 +184,19 @@ public abstract class AbstractDao<EntityType extends IdentifiedEntity> implement
 
 	@Override
 	public long count() {
+		return countWithPredicate(null);
+	}
+
+	private long countWithPredicate(@Nullable PredicateProvider<EntityType> predicateProvider) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> cr = criteriaBuilder.createQuery(Long.class);
 		Root<EntityType> root = cr.from(getEntityClass());
 
 		cr.select(criteriaBuilder.count(root));
+
+		if (predicateProvider != null) {
+			cr.where(predicateProvider.createPredicate(criteriaBuilder, root));
+		}
 
 		Long rowCount = entityManager.createQuery(cr).getSingleResult();
 
@@ -188,6 +205,11 @@ public abstract class AbstractDao<EntityType extends IdentifiedEntity> implement
 		}
 
 		return rowCount;
+	}
+
+	@Override
+	public long count(PredicateProvider<EntityType> predicateProvider) {
+		return countWithPredicate(predicateProvider);
 	}
 
 	protected abstract Class<EntityType> getEntityClass();

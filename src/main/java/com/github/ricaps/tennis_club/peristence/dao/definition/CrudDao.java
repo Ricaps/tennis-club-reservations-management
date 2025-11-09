@@ -1,6 +1,7 @@
 package com.github.ricaps.tennis_club.peristence.dao.definition;
 
 import com.github.ricaps.tennis_club.peristence.entity.IdentifiedEntity;
+import com.github.ricaps.tennis_club.peristence.utils.PredicateProvider;
 import org.springframework.data.domain.Sort;
 
 import java.util.Collection;
@@ -69,4 +70,9 @@ public interface CrudDao<EntityType extends IdentifiedEntity> {
 	 */
 	long count();
 
+	/**
+	 * Returns count of all entities filtered by defined predicate
+	 * @return number of entities as Long
+	 */
+	long count(PredicateProvider<EntityType> predicateProvider);
 }

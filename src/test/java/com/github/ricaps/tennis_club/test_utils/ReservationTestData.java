@@ -28,10 +28,14 @@ public class ReservationTestData {
 
 	public static Reservation entity(Court court, User user) {
 		OffsetDateTime startTime = Instant.parse("2025-01-01T14:00:00Z").atOffset(ZoneOffset.UTC);
+		return entity(court, user, startTime);
+	}
+
+	public static Reservation entity(Court court, User user, OffsetDateTime referenceTime) {
 		return Reservation.builder()
 			.uid(UUID.randomUUID())
-			.fromTime(startTime)
-			.toTime(startTime.plusHours(2))
+			.fromTime(referenceTime)
+			.toTime(referenceTime.plusHours(2))
 			.isQuadGame(true)
 			.totalPrice(new MoneyAmount(new BigDecimal("15.30"), Currency.getInstance("CZK")))
 			.court(court)
