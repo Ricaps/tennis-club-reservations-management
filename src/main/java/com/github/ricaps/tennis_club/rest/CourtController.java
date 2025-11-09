@@ -43,10 +43,8 @@ public class CourtController {
 	}
 
 	@Operation(description = "Creates a court")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "201", description = "Court created successfully",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
+	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Court created successfully",
+			content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@PostMapping
 	public ResponseEntity<CourtViewDto> create(@RequestBody @Valid CourtCreateDto courtCreateDto) {
 		CourtViewDto courtView = courtFacade.create(courtCreateDto);
@@ -58,7 +56,6 @@ public class CourtController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Court found and returned successfully",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed"),
 			@ApiResponse(responseCode = "404", description = "Court not found") })
 	@GetMapping("/{uid}")
 	public ResponseEntity<CourtViewDto> get(@PathVariable UUID uid) {
@@ -68,10 +65,8 @@ public class CourtController {
 	}
 
 	@Operation(description = "Get all courts paged")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Court found and returned successfully",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed"), })
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Court found and returned successfully",
+			content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@GetMapping
 	@PageableAsQueryParam
 	public ResponseEntity<PagedModel<CourtViewDto>> get(
@@ -82,10 +77,8 @@ public class CourtController {
 	}
 
 	@Operation(description = "Updates a court by its uid")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Court updated successfully",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Court updated successfully",
+			content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@PutMapping("/{uid}")
 	public ResponseEntity<CourtViewDto> update(@PathVariable UUID uid,
 			@RequestBody @Valid CourtCreateDto courtCreateDto) {
@@ -95,8 +88,7 @@ public class CourtController {
 	}
 
 	@Operation(description = "Deletes a court")
-	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "Court deleted successfully"),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
+	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "Court deleted successfully") })
 	@DeleteMapping("/{uid}")
 	public ResponseEntity<CourtViewDto> delete(@PathVariable UUID uid) {
 		courtFacade.delete(uid);

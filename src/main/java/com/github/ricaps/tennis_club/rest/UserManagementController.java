@@ -44,10 +44,8 @@ public class UserManagementController {
 	}
 
 	@Operation(description = "Creates a user")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "201", description = "User created successfully",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
+	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "User created successfully",
+			content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@PostMapping
 	public ResponseEntity<UserDetailedView> create(@RequestBody @Valid UserCreateDto userCreateDto) {
 		UserDetailedView userViewDto = userFacade.create(userCreateDto);
@@ -59,7 +57,6 @@ public class UserManagementController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "User found and returned successfully",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed"),
 			@ApiResponse(responseCode = "404", description = "User not found") })
 	@GetMapping("/{uid}")
 	public ResponseEntity<UserDetailedView> get(@PathVariable UUID uid) {
@@ -69,10 +66,8 @@ public class UserManagementController {
 	}
 
 	@Operation(description = "Get all users paged")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Users found and returned successfully",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed"), })
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Users found and returned successfully",
+			content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@GetMapping
 	@PageableAsQueryParam
 	public ResponseEntity<PagedModel<UserDetailedView>> get(
@@ -83,10 +78,8 @@ public class UserManagementController {
 	}
 
 	@Operation(description = "Updates a user by its uid")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "User updated successfully",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "User updated successfully",
+			content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@PutMapping("/{uid}")
 	public ResponseEntity<UserDetailedView> update(@PathVariable UUID uid,
 			@RequestBody @Valid UserCreateDto userCreateDto) {
@@ -96,8 +89,7 @@ public class UserManagementController {
 	}
 
 	@Operation(description = "Deletes a user")
-	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "User deleted successfully"),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
+	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "User deleted successfully") })
 	@DeleteMapping("/{uid}")
 	public ResponseEntity<UserDetailedView> delete(@PathVariable UUID uid) {
 		userFacade.delete(uid);

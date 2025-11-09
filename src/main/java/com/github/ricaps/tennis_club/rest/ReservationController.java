@@ -48,10 +48,8 @@ public class ReservationController {
 	}
 
 	@Operation(description = "Creates a reservation")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "201", description = "Reservation created successfully",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
+	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Reservation created successfully",
+			content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@PostMapping
 	public ResponseEntity<ReservationViewDto> create(@RequestBody @Valid ReservationCreateDto reservationCreateDto) {
 		ReservationViewDto reservationView = reservationFacade.create(reservationCreateDto);
@@ -63,7 +61,6 @@ public class ReservationController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Reservation found and returned successfully",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed"),
 			@ApiResponse(responseCode = "404", description = "Reservation not found") })
 	@GetMapping("/{uid}")
 	public ResponseEntity<ReservationViewDto> get(@PathVariable UUID uid) {
@@ -73,10 +70,9 @@ public class ReservationController {
 	}
 
 	@Operation(description = "Get all reservations paged")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Reservation found and returned successfully",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed"), })
+	@ApiResponses(
+			value = { @ApiResponse(responseCode = "200", description = "Reservation found and returned successfully",
+					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@GetMapping
 	@PageableAsQueryParam
 	public ResponseEntity<PagedModel<ReservationViewDto>> get(
@@ -87,10 +83,8 @@ public class ReservationController {
 	}
 
 	@Operation(description = "Updates a reservation by its uid")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Reservation updated successfully",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Reservation updated successfully",
+			content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@PutMapping("/{uid}")
 	public ResponseEntity<ReservationViewDto> update(@PathVariable UUID uid,
 			@RequestBody @Valid ReservationCreateDto reservationCreateDto) {
@@ -100,8 +94,7 @@ public class ReservationController {
 	}
 
 	@Operation(description = "Deletes a reservation")
-	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "Reservation deleted successfully"),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
+	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "Reservation deleted successfully") })
 	@DeleteMapping("/{uid}")
 	public ResponseEntity<ReservationViewDto> delete(@PathVariable UUID uid) {
 		reservationFacade.delete(uid);
@@ -110,10 +103,9 @@ public class ReservationController {
 	}
 
 	@Operation(description = "Get all reservations paged filtered by specific court UID")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Reservation found and returned successfully",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed"), })
+	@ApiResponses(
+			value = { @ApiResponse(responseCode = "200", description = "Reservation found and returned successfully",
+					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@GetMapping("/court/{courtUID}")
 	@PageableAsQueryParam
 	public ResponseEntity<PagedModel<ReservationViewDto>> getByCourt(@PathVariable UUID courtUID,
@@ -124,10 +116,9 @@ public class ReservationController {
 	}
 
 	@Operation(description = "Get all reservations paged filtered by user (phoneNumber) and time")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Reservation found and returned successfully",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed"), })
+	@ApiResponses(
+			value = { @ApiResponse(responseCode = "200", description = "Reservation found and returned successfully",
+					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@GetMapping("/user/{phoneNumber}")
 	@PageableAsQueryParam
 	public ResponseEntity<PagedModel<ReservationViewDto>> getByPhoneNumber(

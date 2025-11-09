@@ -42,7 +42,6 @@ public class AuthController {
 			@ApiResponse(responseCode = "201", description = "User registered successfully.",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE),
 					headers = @Header(name = "Authorization", description = "JWT token")),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed"),
 			@ApiResponse(responseCode = "404", description = "Court not found") })
 	@PostMapping("/register")
 	public ResponseEntity<Void> register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
@@ -59,7 +58,6 @@ public class AuthController {
 			@ApiResponse(responseCode = "200", description = "User logged-in successfully.",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE),
 					headers = @Header(name = "Authorization", description = "JWT token")),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed"),
 			@ApiResponse(responseCode = "404", description = "Court not found") })
 	@PostMapping("/login")
 	public ResponseEntity<Void> login(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {

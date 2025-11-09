@@ -43,10 +43,8 @@ public class SurfaceController {
 	}
 
 	@Operation(description = "Creates a surface")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "201", description = "Surface created successfully",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
+	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Surface created successfully",
+			content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@PostMapping
 	public ResponseEntity<SurfaceViewDto> create(@RequestBody @Valid SurfaceCreateDto surfaceCreateDto) {
 		SurfaceViewDto surfaceView = surfaceFacade.create(surfaceCreateDto);
@@ -58,7 +56,6 @@ public class SurfaceController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Surface found and returned successfully",
 					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed"),
 			@ApiResponse(responseCode = "404", description = "Surface not found") })
 	@GetMapping("/{uid}")
 	public ResponseEntity<SurfaceViewDto> get(@PathVariable UUID uid) {
@@ -68,10 +65,8 @@ public class SurfaceController {
 	}
 
 	@Operation(description = "Get all surfaces paged")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Surface found and returned successfully",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed"), })
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Surface found and returned successfully",
+			content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@GetMapping
 	@PageableAsQueryParam
 	public ResponseEntity<PagedModel<SurfaceViewDto>> get(
@@ -82,10 +77,8 @@ public class SurfaceController {
 	}
 
 	@Operation(description = "Updates a surface by its uid")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Surface updated successfully",
-					content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Surface updated successfully",
+			content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) })
 	@PutMapping("/{uid}")
 	public ResponseEntity<SurfaceViewDto> update(@PathVariable UUID uid,
 			@RequestBody @Valid SurfaceCreateDto surfaceCreateDto) {
@@ -95,8 +88,7 @@ public class SurfaceController {
 	}
 
 	@Operation(description = "Deletes a surface")
-	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "Surface deleted successfully"),
-			@ApiResponse(responseCode = "400", description = "Validation of input request failed") })
+	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "Surface deleted successfully") })
 	@DeleteMapping("/{uid}")
 	public ResponseEntity<SurfaceViewDto> delete(@PathVariable UUID uid) {
 		surfaceFacade.delete(uid);
