@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
-class UserFacadeTest {
+class UserFacadeImplTest {
 
 	private final UserMapper userMapper = Mockito.spy(Mappers.getMapperClass(UserMapper.class));
 
@@ -38,7 +38,7 @@ class UserFacadeTest {
 	private PasswordEncoder passwordEncoder;
 
 	@InjectMocks
-	private UserFacade userFacade;
+	private UserFacadeImpl userFacade;
 
 	@Test
 	void create_nullEntity_throwsException() {

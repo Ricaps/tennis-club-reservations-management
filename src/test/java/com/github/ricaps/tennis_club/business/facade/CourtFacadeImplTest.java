@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
-class CourtFacadeTest {
+class CourtFacadeImplTest {
 
 	private final CourtMapper courtMapper = Mockito.spy(Mappers.getMapperClass(CourtMapper.class));
 
@@ -40,7 +40,7 @@ class CourtFacadeTest {
 	private SurfaceService surfaceService;
 
 	@InjectMocks
-	private CourtFacade courtFacade;
+	private CourtFacadeImpl courtFacade;
 
 	@Test
 	void create_nullEntity_throwsException() {

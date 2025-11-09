@@ -2,7 +2,6 @@ package com.github.ricaps.tennis_club.business.facade;
 
 import com.github.ricaps.tennis_club.api.user.UserCreateDto;
 import com.github.ricaps.tennis_club.api.user.UserDetailedView;
-import com.github.ricaps.tennis_club.business.facade.definition.CrudFacade;
 import com.github.ricaps.tennis_club.business.facade.definition.GenericFacade;
 import com.github.ricaps.tennis_club.business.mapping.UserMapper;
 import com.github.ricaps.tennis_club.business.service.definition.UserService;
@@ -18,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserFacade implements CrudFacade<UserDetailedView, UserCreateDto> {
+public class UserFacadeImpl implements com.github.ricaps.tennis_club.business.facade.definition.UserFacade {
 
 	private final UserMapper userMapper;
 
@@ -28,7 +27,7 @@ public class UserFacade implements CrudFacade<UserDetailedView, UserCreateDto> {
 
 	private final PasswordEncoder passwordEncoder;
 
-	public UserFacade(UserService userService, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+	public UserFacadeImpl(UserService userService, UserMapper userMapper, PasswordEncoder passwordEncoder) {
 		this.passwordEncoder = passwordEncoder;
 		this.genericFacade = new GenericFacade<>(userService, userMapper, User.class);
 		this.userMapper = userMapper;
