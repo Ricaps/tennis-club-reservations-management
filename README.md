@@ -10,8 +10,8 @@
   priced ×1.5).
 - ☎️ Automatically manage **customers** by phone number — new users are created when a number doesn’t yet exist.
 - 🔐 Secure the system with **JWT-based authentication**, including:
-    - Registration at [`/api/auth/register`](http://localhost:8080/api/auth/register)
-    - Login at [`/api/auth/login`](http://localhost:8080/api/auth/login)
+  - Registration at [`/api/v1/auth/register`](http://localhost:8080/api/auth/register)
+  - Login at [`/api/v1/auth/login`](http://localhost:8080/api/auth/login)
 - 📘 Explore and test all REST endpoints through an interactive **Swagger UI** available at  
   [`http://localhost:8080/api/swagger-ui/index.html`](http://localhost:8080/api/swagger-ui/index.html).
 - 🗑️ Implement **soft delete** for all entities, with optional **data initialization** (2 surfaces and 4 courts) enabled
