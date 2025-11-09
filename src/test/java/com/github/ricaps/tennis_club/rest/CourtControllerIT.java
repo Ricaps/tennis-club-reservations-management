@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ricaps.tennis_club.api.court.CourtCreateDto;
 import com.github.ricaps.tennis_club.api.court.CourtViewDto;
 import com.github.ricaps.tennis_club.api.shared.ErrorDto;
+import com.github.ricaps.tennis_club.api.shared.FieldErrorDto;
 import com.github.ricaps.tennis_club.business.facade.definition.CourtFacade;
 import com.github.ricaps.tennis_club.peristence.dao.definition.CourtDao;
 import com.github.ricaps.tennis_club.peristence.dao.definition.SurfaceDao;
@@ -100,7 +101,7 @@ class CourtControllerIT {
 
 		ErrorDto error = objectMapper.readValue(response, ErrorDto.class);
 		assertError(error, "Invalid request content.", HttpStatus.BAD_REQUEST,
-				List.of(new ErrorDto.FieldError("name", "size must be between 1 and 255")));
+				List.of(new FieldErrorDto("name", "size must be between 1 and 255")));
 	}
 
 	@Test

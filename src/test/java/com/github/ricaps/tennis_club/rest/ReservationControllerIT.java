@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ricaps.tennis_club.api.reservation.ReservationCreateDto;
 import com.github.ricaps.tennis_club.api.reservation.ReservationViewDto;
 import com.github.ricaps.tennis_club.api.shared.ErrorDto;
+import com.github.ricaps.tennis_club.api.shared.FieldErrorDto;
 import com.github.ricaps.tennis_club.business.facade.definition.ReservationFacade;
 import com.github.ricaps.tennis_club.peristence.dao.definition.ReservationDao;
 import com.github.ricaps.tennis_club.peristence.entity.Court;
@@ -151,7 +152,7 @@ class ReservationControllerIT {
 
 		ErrorDto error = objectMapper.readValue(response, ErrorDto.class);
 		assertError(error, "Invalid request content.", HttpStatus.BAD_REQUEST,
-				List.of(new ErrorDto.FieldError("fromTime", "must be a future date")));
+				List.of(new FieldErrorDto("fromTime", "must be a future date")));
 	}
 
 	@Test

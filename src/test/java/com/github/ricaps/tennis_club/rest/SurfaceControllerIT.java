@@ -2,6 +2,7 @@ package com.github.ricaps.tennis_club.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ricaps.tennis_club.api.shared.ErrorDto;
+import com.github.ricaps.tennis_club.api.shared.FieldErrorDto;
 import com.github.ricaps.tennis_club.api.surface.SurfaceCreateDto;
 import com.github.ricaps.tennis_club.api.surface.SurfaceViewDto;
 import com.github.ricaps.tennis_club.business.facade.definition.SurfaceFacade;
@@ -85,7 +86,7 @@ class SurfaceControllerIT {
 
 		ErrorDto error = objectMapper.readValue(response, ErrorDto.class);
 		assertError(error, "Invalid request content.", HttpStatus.BAD_REQUEST,
-				List.of(new ErrorDto.FieldError("name", "size must be between 1 and 255")));
+				List.of(new FieldErrorDto("name", "size must be between 1 and 255")));
 	}
 
 	@Test
