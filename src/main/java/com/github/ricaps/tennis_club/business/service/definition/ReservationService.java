@@ -12,4 +12,5 @@ public interface ReservationService extends CrudService<Reservation> {
 	PageableResult<Reservation> getAllByCourt(UUID courtUID, Pageable pageable);
 
 	PageableResult<Reservation> getAllByPhoneNumber(String phoneNumber, OffsetDateTime fromTime, Pageable pageable);
+
 }

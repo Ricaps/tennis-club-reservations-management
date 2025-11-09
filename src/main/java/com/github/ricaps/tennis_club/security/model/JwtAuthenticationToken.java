@@ -39,4 +39,5 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 	public int hashCode() {
 		return Objects.hash(super.hashCode(), getPrincipal(), jwt);
 	}
+
 }

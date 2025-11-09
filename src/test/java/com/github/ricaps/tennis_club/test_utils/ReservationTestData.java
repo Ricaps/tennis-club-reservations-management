@@ -60,8 +60,8 @@ public class ReservationTestData {
 		return new ReservationCreateDto(surfaceUID, startTime.minusMonths(1), startTime.plusHours(1), false);
 	}
 
-	public void compareViewAndCreate(ReservationViewDto reservationViewDto, ReservationCreateDto createDto,
-			Court court, User user) {
+	public void compareViewAndCreate(ReservationViewDto reservationViewDto, ReservationCreateDto createDto, Court court,
+			User user) {
 		assertThat(reservationViewDto.uid()).isNotNull();
 		assertThat(reservationViewDto.fromTime()).isEqualTo(createDto.fromTime());
 		assertThat(reservationViewDto.toTime()).isEqualTo(createDto.toTime());
