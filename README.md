@@ -69,6 +69,7 @@ When **data initialization** is enabled (`application.database-seed=true`), the 
 
 This user can be used to log in via the authentication endpoint (Bearer token can be found in response header):  
 [`POST /api/v1/auth/login`](http://localhost:8080/api/v1/auth/login)
+
 ---
 
 ## 🗂️ Diagrams
