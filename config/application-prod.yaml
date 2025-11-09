@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:tennis
+    username: user
+    password: password
+
+application:
+  database-seed: true
+
+jwt:
+  secret: mySuperLongSecretKeyValueThatHasAtLeastThirtyTwoCharacters
+  expiration: 900000

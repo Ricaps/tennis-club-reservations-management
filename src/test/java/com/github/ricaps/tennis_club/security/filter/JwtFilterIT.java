@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @Transactional
-class JwtFilterTest {
+class JwtFilterIT {
 
 	SecuritySupport.TestSecurityContext testSecurityContext;
 
