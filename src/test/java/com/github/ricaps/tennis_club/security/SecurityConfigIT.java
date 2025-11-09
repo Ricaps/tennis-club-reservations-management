@@ -31,9 +31,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(
-		properties = { "application.database-seed=true",
-				"spring.datasource.url=jdbc:h2:mem:security-test;DB_CLOSE_DELAY=-1" })
+@SpringBootTest(properties = { "application.database-seed=true",
+		"spring.datasource.url=jdbc:h2:mem:security-test;DB_CLOSE_DELAY=-1" })
 @AutoConfigureMockMvc
 @Transactional
 class SecurityConfigIT {

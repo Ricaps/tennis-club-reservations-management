@@ -132,4 +132,5 @@ public class ReservationServiceImpl implements ReservationService {
 		return reservationDao.getReservationsByPhoneNumber(phoneNumber, fromTime, pageable.getPageNumber(),
 				pageable.getPageSize(), pageable.getSort());
 	}
+
 }

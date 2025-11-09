@@ -36,7 +36,6 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(ex.getStatusCode()).body(error);
 	}
 
-
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorDto> handleOtherExceptions(Exception ex) {
 		final ErrorDto error = new ErrorDto(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), List.of());
@@ -52,4 +51,5 @@ public class GlobalExceptionHandler {
 		log.error("An missing header error occurred while running request", ex);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}
+
 }
