@@ -2,6 +2,7 @@ package com.github.ricaps.tennis_club.exception;
 
 import com.github.ricaps.tennis_club.api.shared.ErrorDto;
 import com.github.ricaps.tennis_club.api.shared.FieldErrorDto;
+import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,14 @@ public class GlobalExceptionHandler {
 		final ErrorDto error = new ErrorDto(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), List.of());
 
 		log.error("An missing header error occurred while running request", ex);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+	}
+
+	@ExceptionHandler(ValidationException.class)
+	public ResponseEntity<ErrorDto> handleValidationException(ValidationException ex) {
+		final ErrorDto error = new ErrorDto(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), List.of());
+
+		log.error("An validation exception occurred during running request", ex);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}
 
