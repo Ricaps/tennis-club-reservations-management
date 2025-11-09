@@ -1,6 +1,7 @@
 package com.github.ricaps.tennis_club.test_utils;
 
 import com.github.ricaps.tennis_club.api.shared.ErrorDto;
+import com.github.ricaps.tennis_club.api.shared.FieldErrorDto;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class AssertionUtils {
 	}
 
 	public static void assertError(ErrorDto errorDto, String message, HttpStatus statusCode,
-			List<ErrorDto.FieldError> fieldErrors) {
+			List<FieldErrorDto> fieldErrors) {
 		if (message != null) {
 			assertThat(errorDto.message()).isEqualTo(message);
 		}

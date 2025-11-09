@@ -1,6 +1,7 @@
 package com.github.ricaps.tennis_club.exception;
 
 import com.github.ricaps.tennis_club.api.shared.ErrorDto;
+import com.github.ricaps.tennis_club.api.shared.FieldErrorDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,9 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErrorDto> handleValidationException(MethodArgumentNotValidException ex) {
-		final List<ErrorDto.FieldError> fieldErrors = ex.getFieldErrors()
+		final List<FieldErrorDto> fieldErrors = ex.getFieldErrors()
 			.stream()
-			.map(fieldError -> new ErrorDto.FieldError(fieldError.getField(), fieldError.getDefaultMessage()))
+			.map(fieldError -> new FieldErrorDto(fieldError.getField(), fieldError.getDefaultMessage()))
 			.toList();
 
 		final ErrorDto error = new ErrorDto(ex.getBody().getDetail(), ex.getStatusCode().value(), fieldErrors);
