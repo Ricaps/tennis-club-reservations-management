@@ -63,7 +63,7 @@ public class AuthController {
 			@ApiResponse(responseCode = "404", description = "Court not found") })
 	@PostMapping("/login")
 	public ResponseEntity<Void> login(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-		if (authHeader == null || !authHeader.startsWith(BASIC_PREFIX)) {
+		if (!authHeader.startsWith(BASIC_PREFIX)) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
 

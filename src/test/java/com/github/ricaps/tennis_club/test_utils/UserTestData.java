@@ -9,7 +9,6 @@ import com.github.ricaps.tennis_club.peristence.entity.Role;
 import com.github.ricaps.tennis_club.peristence.entity.User;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -24,17 +23,21 @@ public class UserTestData {
 	}
 
 	public static User entity() {
-		return entity(true);
+		return entity(true, Set.of(Role.USER, Role.ADMIN));
 	}
 
 	public static User entity(boolean randomPhone) {
+		return entity(randomPhone, Set.of(Role.USER, Role.ADMIN));
+	}
+
+	public static User entity(boolean randomPhone, Set<Role> roles) {
 		return User.builder()
 			.firstName("John")
 			.familyName("Doe")
 			.password("12345")
 			.phoneNumber(randomPhone ? getRandomPhoneNumber() : "777777777")
 			.uid(UUID.randomUUID())
-			.roles(new HashSet<>(List.of(Role.USER, Role.ADMIN)))
+			.roles(new HashSet<>(roles))
 			.build();
 	}
 
