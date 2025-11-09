@@ -126,6 +126,28 @@ class AuthControllerIT {
 	}
 
 	@Test
+	void login_noHeader_returnsBadRequest() throws Exception {
+		String authorizationHeader = mockMvc.perform(post("/v1/auth/login"))
+			.andExpect(status().isBadRequest())
+			.andReturn()
+			.getResponse()
+			.getHeader(HttpHeaders.AUTHORIZATION);
+
+		assertThat(authorizationHeader).isNull();
+	}
+
+	@Test
+	void login_headerWithoutBasicPrefix_returnsBadRequest() throws Exception {
+		String authorizationHeader = mockMvc.perform(post("/v1/auth/login").header("Authorization", "someHeader"))
+			.andExpect(status().isBadRequest())
+			.andReturn()
+			.getResponse()
+			.getHeader(HttpHeaders.AUTHORIZATION);
+
+		assertThat(authorizationHeader).isNull();
+	}
+
+	@Test
 	void login_existingUser_returnsToken() throws Exception {
 		String password = "passwooooord";
 		User user = UserTestData.entity();

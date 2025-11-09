@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
@@ -42,5 +43,13 @@ public class GlobalExceptionHandler {
 
 		log.error("An error occurred while running request", ex);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+	}
+
+	@ExceptionHandler(MissingRequestHeaderException.class)
+	public ResponseEntity<ErrorDto> handleMissingErrorHeader(MissingRequestHeaderException ex) {
+		final ErrorDto error = new ErrorDto(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), List.of());
+
+		log.error("An missing header error occurred while running request", ex);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}
 }

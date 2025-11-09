@@ -35,7 +35,11 @@ public class SecuritySupport {
 	WebApplicationContext context;
 
 	public TestSecurityContext defineUserAndGetMvc(boolean saveUser) {
-		User user = UserTestData.entity();
+		return defineUserAndGetMvc(saveUser, Set.of(Role.ADMIN, Role.USER));
+	}
+
+	public TestSecurityContext defineUserAndGetMvc(boolean saveUser, Set<Role> roles) {
+		User user = UserTestData.entity(true, roles);
 		if (saveUser) {
 			userDao.save(user);
 		}
