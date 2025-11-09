@@ -2,7 +2,7 @@ package com.github.ricaps.tennis_club.rest;
 
 import com.github.ricaps.tennis_club.api.surface.SurfaceCreateDto;
 import com.github.ricaps.tennis_club.api.surface.SurfaceViewDto;
-import com.github.ricaps.tennis_club.business.facade.SurfaceFacade;
+import com.github.ricaps.tennis_club.business.facade.definition.SurfaceFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

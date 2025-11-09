@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ricaps.tennis_club.api.court.CourtCreateDto;
 import com.github.ricaps.tennis_club.api.court.CourtViewDto;
 import com.github.ricaps.tennis_club.api.shared.ErrorDto;
-import com.github.ricaps.tennis_club.business.facade.CourtFacade;
+import com.github.ricaps.tennis_club.business.facade.definition.CourtFacade;
 import com.github.ricaps.tennis_club.peristence.dao.definition.CourtDao;
 import com.github.ricaps.tennis_club.peristence.dao.definition.SurfaceDao;
 import com.github.ricaps.tennis_club.peristence.entity.Court;

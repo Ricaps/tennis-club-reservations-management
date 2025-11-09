@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ricaps.tennis_club.api.shared.ErrorDto;
 import com.github.ricaps.tennis_club.api.user.UserCreateDto;
 import com.github.ricaps.tennis_club.api.user.UserDetailedView;
-import com.github.ricaps.tennis_club.business.facade.UserFacade;
+import com.github.ricaps.tennis_club.business.facade.definition.UserFacade;
 import com.github.ricaps.tennis_club.peristence.dao.definition.UserDao;
 import com.github.ricaps.tennis_club.peristence.entity.Role;
 import com.github.ricaps.tennis_club.peristence.entity.User;

@@ -2,8 +2,8 @@ package com.github.ricaps.tennis_club.business.facade;
 
 import com.github.ricaps.tennis_club.api.surface.SurfaceCreateDto;
 import com.github.ricaps.tennis_club.api.surface.SurfaceViewDto;
-import com.github.ricaps.tennis_club.business.facade.definition.CrudFacade;
 import com.github.ricaps.tennis_club.business.facade.definition.GenericFacade;
+import com.github.ricaps.tennis_club.business.facade.definition.SurfaceFacade;
 import com.github.ricaps.tennis_club.business.mapping.SurfaceMapper;
 import com.github.ricaps.tennis_club.business.service.definition.SurfaceService;
 import com.github.ricaps.tennis_club.peristence.entity.Surface;
@@ -15,11 +15,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class SurfaceFacade implements CrudFacade<SurfaceViewDto, SurfaceCreateDto> {
+public class SurfaceFacadeImpl implements SurfaceFacade {
 
 	private final GenericFacade<SurfaceViewDto, SurfaceCreateDto, Surface> genericFacade;
 
-	public SurfaceFacade(SurfaceMapper surfaceMapper, SurfaceService surfaceService) {
+	public SurfaceFacadeImpl(SurfaceMapper surfaceMapper, SurfaceService surfaceService) {
 		this.genericFacade = new GenericFacade<>(surfaceService, surfaceMapper, Surface.class);
 	}
 

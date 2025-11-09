@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
-class SurfaceFacadeTest {
+class SurfaceFacadeImplTest {
 
 	private final SurfaceMapper surfaceMapper = Mockito.spy(Mappers.getMapperClass(SurfaceMapper.class));
 
@@ -34,7 +34,7 @@ class SurfaceFacadeTest {
 	private SurfaceService surfaceService;
 
 	@InjectMocks
-	private SurfaceFacade surfaceFacade;
+	private SurfaceFacadeImpl surfaceFacade;
 
 	@Test
 	void create_nullEntity_throwsException() {

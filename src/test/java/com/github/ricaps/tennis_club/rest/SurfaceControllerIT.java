@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ricaps.tennis_club.api.shared.ErrorDto;
 import com.github.ricaps.tennis_club.api.surface.SurfaceCreateDto;
 import com.github.ricaps.tennis_club.api.surface.SurfaceViewDto;
-import com.github.ricaps.tennis_club.business.facade.SurfaceFacade;
+import com.github.ricaps.tennis_club.business.facade.definition.SurfaceFacade;
 import com.github.ricaps.tennis_club.peristence.dao.definition.SurfaceDao;
 import com.github.ricaps.tennis_club.peristence.entity.Role;
 import com.github.ricaps.tennis_club.peristence.entity.Surface;

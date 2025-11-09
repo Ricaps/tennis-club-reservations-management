@@ -2,7 +2,7 @@ package com.github.ricaps.tennis_club.business.facade;
 
 import com.github.ricaps.tennis_club.api.court.CourtCreateDto;
 import com.github.ricaps.tennis_club.api.court.CourtViewDto;
-import com.github.ricaps.tennis_club.business.facade.definition.CrudFacade;
+import com.github.ricaps.tennis_club.business.facade.definition.CourtFacade;
 import com.github.ricaps.tennis_club.business.facade.definition.GenericFacade;
 import com.github.ricaps.tennis_club.business.mapping.CourtMapper;
 import com.github.ricaps.tennis_club.business.service.definition.CourtService;
@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class CourtFacade implements CrudFacade<CourtViewDto, CourtCreateDto> {
+public class CourtFacadeImpl implements CourtFacade {
 
 	private final CourtService courtService;
 
@@ -29,7 +29,7 @@ public class CourtFacade implements CrudFacade<CourtViewDto, CourtCreateDto> {
 
 	private final GenericFacade<CourtViewDto, CourtCreateDto, Court> genericFacade;
 
-	public CourtFacade(CourtService courtService, SurfaceService surfaceService, CourtMapper courtMapper) {
+	public CourtFacadeImpl(CourtService courtService, SurfaceService surfaceService, CourtMapper courtMapper) {
 		this.courtService = courtService;
 		this.surfaceService = surfaceService;
 		this.courtMapper = courtMapper;

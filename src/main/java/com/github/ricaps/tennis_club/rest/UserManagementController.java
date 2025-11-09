@@ -2,7 +2,7 @@ package com.github.ricaps.tennis_club.rest;
 
 import com.github.ricaps.tennis_club.api.user.UserCreateDto;
 import com.github.ricaps.tennis_club.api.user.UserDetailedView;
-import com.github.ricaps.tennis_club.business.facade.UserFacade;
+import com.github.ricaps.tennis_club.business.facade.definition.UserFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
